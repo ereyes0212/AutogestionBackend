@@ -1,0 +1,15 @@
+meta {
+  name: GetConfiguracionAprobacionByEmpresaId
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{url}}/api/ConfiguracionAprobacion/empresaId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

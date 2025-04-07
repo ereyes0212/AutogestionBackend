@@ -1,0 +1,24 @@
+meta {
+  name: PutUsuario
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{url}}/api/Usuario/e8c50ed7-9259-4ba8-98d4-7eeefbe2e06
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "usuario": "karooo.es",
+    "contrasena": "karooo.es",
+    "role_id":"5e79ce9c-f1e1-4766-92b6-e05a33db694c",
+    "empleado_id":"ef7152a5-01e6-46c5-be0e-6f2f0405e81a"
+  }
+}

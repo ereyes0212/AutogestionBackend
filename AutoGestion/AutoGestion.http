@@ -1,0 +1,6 @@
+@AutoGestion_HostAddress = http://localhost:5252
+
+GET {{AutoGestion_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,15 @@
+meta {
+  name: GetPuestosActivosByEmpresa
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{url}}/api/Puesto/activos/empresa
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

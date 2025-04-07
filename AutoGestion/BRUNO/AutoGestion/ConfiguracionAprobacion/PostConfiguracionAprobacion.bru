@@ -1,0 +1,34 @@
+meta {
+  name: PostConfiguracionAprobacion
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/api/ConfiguracionAprobacion
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  [
+    {
+      "Empresa_id":"de38d9da-697e-4afa-b984-2873226370e9",
+      "puesto_id": "b42fdb09-5f35-4011-9990-3fd7b2806670",
+      "nivel": 2,
+      "tipo": "Fijo",       
+      "descripcion": "Gerente de RRHH"
+    },
+    {
+          "Empresa_id":"de38d9da-697e-4afa-b984-2873226370e9",
+      "nivel": 1,
+      "tipo": "Dinamico",
+      "descripcion": "Jefe Inmediato"
+    }
+  ]
+  
+}

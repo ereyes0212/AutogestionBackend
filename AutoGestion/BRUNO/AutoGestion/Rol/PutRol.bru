@@ -1,0 +1,23 @@
+meta {
+  name: PutRol
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{url}}/api/Rol/5e79ce9c-f1e1-4766-92b6-e05a33db694
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "ROl Cajero",
+    "descripcion": "Hecho Pija Cajero",
+    "activo":true
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: GetConfiguracionAprobacion
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/api/Puesto
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

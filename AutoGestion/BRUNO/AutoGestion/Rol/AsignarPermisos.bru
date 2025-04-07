@@ -1,0 +1,21 @@
+meta {
+  name: AsignarPermisos
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{url}}/api/Rol/18f2da9e-c36c-44e5-8deb-44f8fd83c554/asignar-permisos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  [
+    "9ea73747-7736-43a5-8bc0-34608da92271"
+  ]
+}

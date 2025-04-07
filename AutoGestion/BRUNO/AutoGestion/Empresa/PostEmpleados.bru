@@ -1,0 +1,21 @@
+meta {
+  name: PostEmpleados
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/api/Empresa
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "Condelta"
+  }
+}

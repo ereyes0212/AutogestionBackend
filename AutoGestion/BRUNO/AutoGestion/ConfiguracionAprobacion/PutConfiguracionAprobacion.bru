@@ -1,0 +1,27 @@
+meta {
+  name: PutConfiguracionAprobacion
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{url}}/api/Empleado/3cbe9cca-0a78-4a19-9890-2e107c5de8a4
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "karoliz",
+    "apellido": "reyes",
+    "correo":"asdew@gmail.com",
+    "telefono": "22334455",
+    "edad": 28,
+    "genero": "asdasdasd",
+    "activo":true
+  }
+}

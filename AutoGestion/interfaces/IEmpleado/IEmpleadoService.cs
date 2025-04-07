@@ -1,0 +1,15 @@
+﻿using AutoGestion.Models;
+
+namespace AutoGestion.interfaces.IEmpleado
+{
+    public interface IEmpleadoService
+    {
+        Task<IEnumerable<EmpleadoDTO>> GetEmpleados();
+        Task<IEnumerable<EmpleadoDTO>> GetEmpleadosActivos();
+        Task<IEnumerable<EmpleadoDTO>> GetEmpleadosActivosByEmpresaId();
+        Task<IEnumerable<EmpleadoDTO>> GetEmpleadosByEmpresaId();
+        Task<EmpleadoDTO> GetEmpleadoById(string id);
+        Task<EmpleadoDTO> PostEmpleados(Empleado empleado);
+        Task<EmpleadoDTO> PutEmpleados(string id, Empleado empleado);
+    }
+}

@@ -1,0 +1,23 @@
+meta {
+  name: PostPuesto
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/api/Puesto
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "Nombre": "Programador web",
+    "Descripcion": "Puesto programador web",
+    "empresa_id":"de38d9da-697e-4afa-b984-2873226370e9"
+  }
+}

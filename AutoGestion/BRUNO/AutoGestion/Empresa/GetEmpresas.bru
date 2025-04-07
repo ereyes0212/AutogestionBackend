@@ -1,0 +1,15 @@
+meta {
+  name: GetEmpresas
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/api/Empresa
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

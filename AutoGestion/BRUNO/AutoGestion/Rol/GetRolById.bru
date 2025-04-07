@@ -1,0 +1,15 @@
+meta {
+  name: GetRolById
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{url}}/api/Rol/5e79ce9c-f1e1-4766-92b6-e05a33db694c
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

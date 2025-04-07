@@ -1,0 +1,25 @@
+meta {
+  name: PostUsuario
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/api/Usuario/
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "usuario": "juan.reyes",
+    "contrasena": "juan.reyes",
+    "role_id":"cb136f14-f5a1-4c69-9b07-0675674c5010",
+    "empleado_id":"37d0f1e2-0d9f-432d-9c7b-314d3acffa00",
+    "empresa_id":"883cb987-6740-402f-9d04-dfddf8544360"
+  }
+}

@@ -1,0 +1,28 @@
+meta {
+  name: PostEmpleados
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/api/Empleado
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "Juan",
+    "apellido": "Reyes",
+    "correo":"juan.reyes@gmail.com",
+    "telefono": "11221122",
+    "edad": 26,
+    "genero": "Masculino",
+    "empresa_id":"de38d9da-697e-4afa-b984-2873226370e9",
+    "puesto_id":"b42fdb09-5f35-4011-9990-3fd7b2806670"
+  }
+}
