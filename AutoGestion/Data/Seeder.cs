@@ -27,6 +27,7 @@ namespace CarWashBackend.Data
                 _context.Empleados.RemoveRange(_context.Empleados);
                 _context.Empresa.RemoveRange(_context.Empresa);
                 _context.Puesto.RemoveRange(_context.Puesto);
+                _context.EmpleadoEmpresa.RemoveRange(_context.EmpleadoEmpresa);
                 _context.SaveChanges();
             }
 
@@ -38,8 +39,8 @@ namespace CarWashBackend.Data
                 return;
             }
 
-            // Crear Empresa
-            var empresa = new Empresa
+            // Crear Empresas
+            var empresa1 = new Empresa
             {
                 Id = Guid.NewGuid().ToString(),
                 nombre = "Diario Tiempo",
@@ -49,42 +50,53 @@ namespace CarWashBackend.Data
                 created_at = DateTime.UtcNow,
                 updated_at = DateTime.UtcNow
             };
-            _context.Empresa.Add(empresa);
+            _context.Empresa.Add(empresa1);
+
+            var empresa2 = new Empresa
+            {
+                Id = Guid.NewGuid().ToString(),
+                nombre = "Tiempo Digital",
+                activo = true,
+                adicionado_por = "Sistema",
+                modificado_por = "Sistema",
+                created_at = DateTime.UtcNow,
+                updated_at = DateTime.UtcNow
+            };
+            _context.Empresa.Add(empresa2);
             _context.SaveChanges();
-
-
 
             // Sembrar Permisos (solo si no existen)
             if (!_context.Permisos.Any())
             {
                 _context.Permisos.AddRange(
-                    new Permiso
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Nombre = "ver_empleado",
-                        Descripcion = "Permiso para ver empleados",
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        Activo = true
-                    },
-                    new Permiso
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Nombre = "crear_empleado",
-                        Descripcion = "Permiso para crear empleados",
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        Activo = true
-                    },
-                    new Permiso
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Nombre = "editar_empleado",
-                        Descripcion = "Permiso para editar empleados",
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        Activo = true
-                    }
+
+                    //empleados
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_empleados", Descripcion = "Permiso para ver los empleados", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_empleados", Descripcion = "Permiso para crear los empleados", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_empleado", Descripcion = "Permiso para editar los empleados", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+
+                    //Empresas
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_empresas", Descripcion = "Permiso para ver las empresas", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_empresas", Descripcion = "Permiso para crear las empresas", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_empresas", Descripcion = "Permiso para editar las empresas", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+
+                    //Permisos
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_permisos", Descripcion = "Permiso para ver los permisos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+
+                    //Roles
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_roles", Descripcion = "Permiso para ver roles", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_roles", Descripcion = "Permiso para crear roles", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_roles", Descripcion = "Permiso para editar roles", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+
+                    //Usuarios
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_usuarios", Descripcion = "Permiso para ver usuarios", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_usuario", Descripcion = "Permiso para crear usuarios", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_usuario", Descripcion = "Permiso para editar usuarios", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+
+                    //Puestos
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_puestos", Descripcion = "Permiso para ver puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_puestos", Descripcion = "Permiso para crear puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_puestos", Descripcion = "Permiso para editar puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true }
                 );
                 _context.SaveChanges();
             }
@@ -126,7 +138,7 @@ namespace CarWashBackend.Data
 
             var puesto = _context.Puesto.FirstOrDefault(e => e.Nombre == "Gerente Recursos Humanos");
 
-            if(puesto == null)
+            if (puesto == null)
             {
                 puesto = new Puesto
                 {
@@ -134,7 +146,7 @@ namespace CarWashBackend.Data
                     Nombre = "Gerente Recursos Humanos",
                     Activo = true,
                     Descripcion = "Gerente de recursos humanos de diario tiempo",
-                    Empresa_id = empresa.Id,
+                    Empresa_id = empresa1.Id,
                     Adicionado_por = "Sistema",
                     Modificado_por = "Sistema",
                     Created_at = DateTime.UtcNow,
@@ -143,6 +155,7 @@ namespace CarWashBackend.Data
                 _context.Puesto.Add(puesto);
                 _context.SaveChanges();
             }
+
             // Crear Empleado si no existe
             var empleado = _context.Empleados.FirstOrDefault(e => e.correo == "erick.reyes@tiempo.hn");
             if (empleado == null)
@@ -154,7 +167,6 @@ namespace CarWashBackend.Data
                     apellido = "Reyes Pineda",
                     puesto_id = puesto.Id,
                     correo = "erick.reyes@tiempo.hn",
-                    empresa_id = empresa.Id,
                     edad = 25,
                     genero = "Masculino",
                     activo = true,
@@ -163,7 +175,21 @@ namespace CarWashBackend.Data
                     created_at = DateTime.UtcNow,
                     updated_at = DateTime.UtcNow
                 };
+
                 _context.Empleados.Add(empleado);
+                _context.SaveChanges();
+
+                // Asignar las dos empresas al empleado
+                _context.EmpleadoEmpresa.Add(new EmpleadoEmpresa
+                {
+                    EmpleadoId = empleado.id,
+                    EmpresaId = empresa1.Id
+                });
+                _context.EmpleadoEmpresa.Add(new EmpleadoEmpresa
+                {
+                    EmpleadoId = empleado.id,
+                    EmpresaId = empresa2.Id
+                });
                 _context.SaveChanges();
             }
 
@@ -175,9 +201,8 @@ namespace CarWashBackend.Data
                     id = Guid.NewGuid().ToString(),
                     usuario = "erick.reyes",
                     contrasena = BCrypt.Net.BCrypt.HashPassword("erick.reyes"),
-                    empresa_id = empresa.Id,
                     empleado_id = empleado.id,
-                    role_id = adminRole.Id,
+                    rol_id = adminRole.Id,
                     activo = true,
                     created_at = DateTime.UtcNow,
                     updated_at = DateTime.UtcNow
@@ -186,5 +211,7 @@ namespace CarWashBackend.Data
                 _context.SaveChanges();
             }
         }
+
+
     }
 }

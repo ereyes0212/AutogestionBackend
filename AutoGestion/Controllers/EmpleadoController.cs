@@ -32,6 +32,21 @@ namespace AutoGestion.Controllers
                 throw;
             }
 
+        }  
+        [HttpGet("disponibles")]
+        public async Task<ActionResult<IEnumerable<Empleado>>> GetEmpleadosdisponibles()
+        {
+            try
+            {
+                var empleados = await _empleadoService.GetEmpleadosDisponibles();
+
+                return Ok(empleados);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }       
         [HttpGet("empresaId")]
         public async Task<ActionResult<IEnumerable<Empleado>>> GetEmpleadosByEmpresaId()
@@ -50,22 +65,24 @@ namespace AutoGestion.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Empleado>> CreateEmpleados(Empleado empleado)
+        public async Task<ActionResult<EmpleadoDTO>> CreateEmpleados([FromBody] EmpleadoCreateDto empleadoCreateDto)
         {
             try
             {
-                var empleadoCreate = await _empleadoService.PostEmpleados(empleado);
+                var empleadoCreate = await _empleadoService.PostEmpleados(empleadoCreateDto);
+
                 return Ok(empleadoCreate);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
-
         }
 
+
+
         [HttpPut("{id}")]
-        public async Task<ActionResult<Empleado>> UpdateEmpleados(Empleado empleado, string id)
+        public async Task<ActionResult<Empleado>> UpdateEmpleados(EmpleadoCreateDto empleado, string id)
         {
             try
             {

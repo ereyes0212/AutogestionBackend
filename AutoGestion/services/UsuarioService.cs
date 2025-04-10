@@ -26,8 +26,9 @@ namespace AutoGestion.services
                 contrasena = u.contrasena,
                 empleado = u.Empleado!.nombre,
                 rol = u.Role!.Nombre,
-                rolId = u.role_id,
-                empleadoId = u.role_id
+                rol_id = u.rol_id,
+                empleado_id = u.empleado_id,
+                activo = u.activo
             });
             return usuariosDto;
         }
@@ -41,8 +42,10 @@ namespace AutoGestion.services
                 contrasena = u.contrasena,
                 empleado = u.Empleado.nombre,
                 rol = u.Role.Nombre,
-                rolId = u.role_id,
-                empleadoId = u.role_id
+                rol_id = u.rol_id,
+                empleado_id = u.empleado_id,
+                activo = u.activo
+
             });
             return usuariosDto;
         }
@@ -62,23 +65,21 @@ namespace AutoGestion.services
                 contrasena = u.contrasena,
                 empleado = u.Empleado!.nombre,
                 rol = u.Role!.Nombre,
-                rolId = u.role_id,
-                empleadoId = u.role_id
+                rol_id = u.rol_id,
+                empleado_id = u.empleado_id,
+                activo = u.activo
             };
             return usuarioDto;
         }
 
 
-        public async  Task<UsuarioDto> PostUsuario(Usuario usuario)
+        public async Task<UsuarioDto> PostUsuario(Usuario usuario)
         {
             var token = _asignaciones.GetTokenFromHeader() ?? "";
             usuario.id = _asignaciones.GenerateNewId();
             usuario.created_at = _asignaciones.GetCurrentDateTime();
             usuario.updated_at = _asignaciones.GetCurrentDateTime();
-            if (string.IsNullOrEmpty(usuario.empresa_id))
-            {
-                usuario.empresa_id = _asignaciones.GetClaimValue(token!, "IdEmpresa") ?? "Sistema";
-            }
+            usuario.activo = true;
             usuario.contrasena = _asignaciones.EncriptPassword(usuario.contrasena);
             usuario.adicionado_por = _asignaciones.GetClaimValue(token, "User") ?? "Sistema";
             usuario.modificado_por = _asignaciones.GetClaimValue(token, "User") ?? "Sistema";
@@ -91,8 +92,9 @@ namespace AutoGestion.services
                 contrasena = usuarioCreate.contrasena,
                 empleado = usuarioCreate.Empleado?.nombre ?? "",
                 rol = usuarioCreate.Role?.Nombre ?? "",
-                rolId = usuarioCreate.role_id,
-                empleadoId = usuarioCreate.role_id
+                rol_id = usuarioCreate.rol_id,
+                empleado_id = usuarioCreate.rol_id,
+                activo = usuarioCreate.activo
             };
         }
         public async Task<UsuarioDto> PutUsuario(string id, Usuario usuario)
@@ -117,8 +119,11 @@ namespace AutoGestion.services
                 contrasena = u.contrasena,
                 empleado = u.Empleado!.nombre,
                 rol = u.Role!.Nombre,
-                rolId = u.role_id,
-                empleadoId = u.role_id
+                rol_id = u.rol_id,
+                empleado_id = u.rol_id,
+                activo = u.activo
+                
+
             };
             return usuarioDto;
 

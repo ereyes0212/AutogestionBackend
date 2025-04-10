@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using AutoGestion.Models;
 
 
+
 public class Empresa
 {
     [Key]
@@ -16,11 +17,13 @@ public class Empresa
     [Required]
     [Column(TypeName = "bit")]
     public bool activo { get; set; } = true;
+
     public DateTime? created_at { get; set; }
     public DateTime? updated_at { get; set; }
 
     public string? adicionado_por { get; set; }
     public string? modificado_por { get; set; }
 
+    // Relación muchos a muchos con Empleado a través de EmpleadoEmpresa
+    public ICollection<EmpleadoEmpresa> EmpleadoEmpresas { get; set; } = new List<EmpleadoEmpresa>();
 }
-

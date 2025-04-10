@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using AutoGestion.interfaces;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json;
 
 namespace AutoGestion.services
 
@@ -43,12 +44,24 @@ namespace AutoGestion.services
 
             foreach (var property in properties)
             {
-                var value = property.GetValue(data)?.ToString();
-                if (value != null)
+                var propertyValue = property.GetValue(data);
+
+                if ( propertyValue is IEnumerable<string> list)
                 {
-                    claims.Add(new Claim(property.Name, value));
+                    foreach (var permiso in list)
+                    {
+                        claims.Add(new Claim(property.Name, permiso));
+                    }
+                }
+                else
+                {
+                    var valueString = propertyValue?.ToString();
+                    if (valueString != null)
+                        claims.Add(new Claim(property.Name, valueString));
                 }
             }
+
+
 
             // Generar el token JWT con los claims obtenidos
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

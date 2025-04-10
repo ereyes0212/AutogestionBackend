@@ -30,12 +30,12 @@ namespace Inventario.Controllers
             }
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<RolDto>> GetRolById(string id)
+        public async Task<ActionResult<RoleWithPermissionsDto>> GetRolById(string id)
         {
             try
             {
 
-                var roles = await _rolService.GetRolById(id);
+                var roles = await _rolService.GetRolWithPermissionsById(id);
                 return Ok(roles);
             }
             catch (Exception)
@@ -51,6 +51,36 @@ namespace Inventario.Controllers
                 var roles = await _rolService.GetRolesActivos();
                 if (roles == null || !roles.Any())
                     return NotFound("No se encontraron roles.");
+                return Ok(roles);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }        
+        [HttpGet("permisos")]
+        public async Task<ActionResult<IEnumerable<RolDto>>> GetPermisos()
+        {
+            try
+            {
+                var roles = await _rolService.GetPermisos();
+                if (roles == null || !roles.Any())
+                    return NotFound("No se encontraron permisos.");
+                return Ok(roles);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }        
+        [HttpGet("permisosrol")]
+        public async Task<ActionResult<IEnumerable<RolDto>>> GetPermisosRol()
+        {
+            try
+            {
+                var roles = await _rolService.GetPermisoRolDto();
+                if (roles == null || !roles.Any())
+                    return NotFound("No se encontraron permisos.");
                 return Ok(roles);
             }
             catch (Exception)
@@ -84,25 +114,31 @@ namespace Inventario.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<RolDto>> CreateRoles(Role rol)
+        public async Task<ActionResult<RolDto>> CreateRoles([FromBody] RolCreateDto rolCreateDto)
         {
             try
             {
-            var rolCreate = await _rolService.PostRol(rol);
-            return Ok(rolCreate);
+                // Llamamos al servicio pasando el DTO recibido
+                var rolCreate = await _rolService.PostRol(rolCreateDto);
+
+                // Retornamos el resultado que es un RolDto
+                return Ok(rolCreate);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                // Manejo de errores
+                return BadRequest(new { message = ex.Message });
             }
         }
+
+
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateRoles(string id, Role rol)
+        public async Task<ActionResult> UpdateRoles(RolUpdateDto rolUpdateDto, string id)
         {
             try
             {
-            var rolUpdate = await _rolService.PutRol(rol, id);
-            return Ok(rolUpdate);
+                var rolUpdate = await _rolService.PutRol(rolUpdateDto, id);
+                return Ok(rolUpdate);
             }
             catch (Exception)
             {

@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using AutoGestion.Models;
 
-namespace AutoGestion.Models;
+
 
 public partial class Empleado
 {
@@ -9,8 +10,9 @@ public partial class Empleado
     [StringLength(36)]
     public string? id { get; set; }
 
-    [StringLength(36)]
-    public string? empresa_id { get; set; }
+    // Se elimina la propiedad 'empresa_id' ya que la relación se manejará vía EmpleadoEmpresa.
+    // [StringLength(36)]
+    // public string? empresa_id { get; set; }
 
     [StringLength(36)]
     public string puesto_id { get; set; }
@@ -44,11 +46,7 @@ public partial class Empleado
     public string? adicionado_por { get; set; }
     public string? modificado_por { get; set; }
 
-    // Relaciones
-
-    [ForeignKey("empresa_id")]
-    public Empresa? Empresa { get; set; }
-
+    // Relaciones existentes
     [ForeignKey("puesto_id")]
     public Puesto? Puesto { get; set; }
 
@@ -56,4 +54,7 @@ public partial class Empleado
     public Empleado? Jefe { get; set; }
 
     public Usuario? Usuario { get; set; }
+
+    // Nueva relación muchos a muchos con Empresa a través de EmpleadoEmpresa
+    public ICollection<EmpleadoEmpresa> EmpleadoEmpresas { get; set; } = new List<EmpleadoEmpresa>();
 }

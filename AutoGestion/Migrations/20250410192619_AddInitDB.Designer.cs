@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoGestion.Migrations
 {
     [DbContext(typeof(DbContextAutoGestion))]
-    [Migration("20250407214942_AddConfiguracionAprobacion")]
-    partial class AddConfiguracionAprobacion
+    [Migration("20250410192619_AddInitDB")]
+    partial class AddInitDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,70 +78,21 @@ namespace AutoGestion.Migrations
                     b.ToTable("ConfiguracionAprobacion");
                 });
 
-            modelBuilder.Entity("AutoGestion.Models.Empleado", b =>
+            modelBuilder.Entity("AutoGestion.Models.EmpleadoEmpresa", b =>
                 {
-                    b.Property<string>("id")
+                    b.Property<string>("EmpleadoId")
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
 
-                    b.Property<ulong>("activo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("adicionado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("apellido")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("correo")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("created_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("edad")
-                        .HasColumnType("int");
-
-                    b.Property<string>("empresa_id")
+                    b.Property<string>("EmpresaId")
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
 
-                    b.Property<string>("genero")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.HasKey("EmpleadoId", "EmpresaId");
 
-                    b.Property<string>("jefe_id")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
+                    b.HasIndex("EmpresaId");
 
-                    b.Property<string>("modificado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("nombre")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("puesto_id")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<DateTime?>("updated_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("empresa_id");
-
-                    b.HasIndex("jefe_id");
-
-                    b.HasIndex("puesto_id");
-
-                    b.ToTable("Empleados");
+                    b.ToTable("EmpleadoEmpresa");
                 });
 
             modelBuilder.Entity("AutoGestion.Models.Puesto", b =>
@@ -210,15 +161,10 @@ namespace AutoGestion.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
 
-                    b.Property<string>("empresa_id")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
                     b.Property<string>("modificado_por")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("role_id")
+                    b.Property<string>("rol_id")
                         .IsRequired()
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
@@ -236,11 +182,69 @@ namespace AutoGestion.Migrations
                     b.HasIndex("empleado_id")
                         .IsUnique();
 
-                    b.HasIndex("empresa_id");
-
-                    b.HasIndex("role_id");
+                    b.HasIndex("rol_id");
 
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("Empleado", b =>
+                {
+                    b.Property<string>("id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<ulong>("activo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("adicionado_por")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("apellido")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("correo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("edad")
+                        .HasColumnType("int");
+
+                    b.Property<string>("genero")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("jefe_id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("modificado_por")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("puesto_id")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<DateTime?>("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("jefe_id");
+
+                    b.HasIndex("puesto_id");
+
+                    b.ToTable("Empleados");
                 });
 
             modelBuilder.Entity("Empresa", b =>
@@ -347,7 +351,7 @@ namespace AutoGestion.Migrations
 
                     b.HasIndex("PermisoId");
 
-                    b.ToTable("RolePermiso", (string)null);
+                    b.ToTable("RolePermiso");
                 });
 
             modelBuilder.Entity("AutoGestion.Models.ConfiguracionAprobacion", b =>
@@ -365,27 +369,23 @@ namespace AutoGestion.Migrations
                     b.Navigation("Puesto");
                 });
 
-            modelBuilder.Entity("AutoGestion.Models.Empleado", b =>
+            modelBuilder.Entity("AutoGestion.Models.EmpleadoEmpresa", b =>
                 {
-                    b.HasOne("Empresa", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("empresa_id");
-
-                    b.HasOne("AutoGestion.Models.Empleado", "Jefe")
-                        .WithMany()
-                        .HasForeignKey("jefe_id");
-
-                    b.HasOne("AutoGestion.Models.Puesto", "Puesto")
-                        .WithMany()
-                        .HasForeignKey("puesto_id")
+                    b.HasOne("Empleado", "Empleado")
+                        .WithMany("EmpleadoEmpresas")
+                        .HasForeignKey("EmpleadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Empresa", "Empresa")
+                        .WithMany("EmpleadoEmpresas")
+                        .HasForeignKey("EmpresaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Empleado");
+
                     b.Navigation("Empresa");
-
-                    b.Navigation("Jefe");
-
-                    b.Navigation("Puesto");
                 });
 
             modelBuilder.Entity("AutoGestion.Models.Puesto", b =>
@@ -399,29 +399,38 @@ namespace AutoGestion.Migrations
 
             modelBuilder.Entity("AutoGestion.Models.Usuario", b =>
                 {
-                    b.HasOne("AutoGestion.Models.Empleado", "Empleado")
+                    b.HasOne("Empleado", "Empleado")
                         .WithOne("Usuario")
                         .HasForeignKey("AutoGestion.Models.Usuario", "empleado_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Empresa", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("empresa_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Role", "Role")
                         .WithMany("Usuarios")
-                        .HasForeignKey("role_id")
+                        .HasForeignKey("rol_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Empleado");
 
-                    b.Navigation("Empresa");
-
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Empleado", b =>
+                {
+                    b.HasOne("Empleado", "Jefe")
+                        .WithMany()
+                        .HasForeignKey("jefe_id");
+
+                    b.HasOne("AutoGestion.Models.Puesto", "Puesto")
+                        .WithMany()
+                        .HasForeignKey("puesto_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Jefe");
+
+                    b.Navigation("Puesto");
                 });
 
             modelBuilder.Entity("RolePermiso", b =>
@@ -443,9 +452,16 @@ namespace AutoGestion.Migrations
                     b.Navigation("Rol");
                 });
 
-            modelBuilder.Entity("AutoGestion.Models.Empleado", b =>
+            modelBuilder.Entity("Empleado", b =>
                 {
+                    b.Navigation("EmpleadoEmpresas");
+
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Empresa", b =>
+                {
+                    b.Navigation("EmpleadoEmpresas");
                 });
 
             modelBuilder.Entity("Permiso", b =>

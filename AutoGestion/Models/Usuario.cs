@@ -12,8 +12,6 @@ public partial class Usuario
     [StringLength(36)]
     public string empleado_id { get; set; }
 
-    [StringLength(36)]
-    public string empresa_id { get; set; }
 
     [Required]
     [StringLength(50)]
@@ -27,20 +25,18 @@ public partial class Usuario
 
     [StringLength(36)]
     [Required]
-    public string role_id { get; set; }
+    public string rol_id { get; set; }
 
     [Required]
     [Column(TypeName = "bit")]
     public bool activo { get; set; } = true;
 
-    [ForeignKey("role_id")]
+    [ForeignKey("rol_id")]
     public Role? Role { get; set; }
 
     [ForeignKey("empleado_id")]
     public Empleado? Empleado { get; set; }   
     
-    [ForeignKey("empresa_id")]
-    public Empresa? Empresa { get; set; }
 
     public string? adicionado_por { get; set; }
     public string? modificado_por { get; set; }

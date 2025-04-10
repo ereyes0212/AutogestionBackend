@@ -32,6 +32,7 @@ namespace AutoGestion.services
                 Nombre = p.Nombre,
                 Activo = p.Activo,                
                 empresa = p.Empresa.nombre,
+                empresa_id = p.Empresa_id,
                 Descripcion = p.Descripcion
             });
 
@@ -52,7 +53,8 @@ namespace AutoGestion.services
                 Nombre = puesto.Nombre,
                 Descripcion = puesto.Descripcion,
                 Activo = puesto.Activo,
-                empresa = puesto.Empresa.nombre,
+                empresa_id = puesto.Empresa_id,
+                empresa = puesto.Empresa.Id,
             };
 
             return PuestoDto;
@@ -69,13 +71,14 @@ namespace AutoGestion.services
                 throw new KeyNotFoundException("Puestos no encontrado.");
             }
 
-            var puestosDto = puestos.Select(e => new PuestoDto
+            var puestosDto = puestos.Select(p => new PuestoDto
             {
-                Id = e.Id!,
-                Nombre = e.Nombre,
-                empresa = e.Empresa.nombre,
-                Activo = e.Activo,
-                Descripcion = e.Descripcion,
+                Id = p.Id!,
+                Nombre = p.Nombre,
+                empresa = p.Empresa.nombre,
+                empresa_id = p.Empresa_id,
+                Activo = p.Activo,
+                Descripcion = p.Descripcion,
             });
             return puestosDto;
         }
@@ -90,13 +93,14 @@ namespace AutoGestion.services
                 throw new KeyNotFoundException("Puesto no encontrado.");
             }
 
-            var PuestosDto = puestos.Select(e => new PuestoDto
+            var PuestosDto = puestos.Select(p => new PuestoDto
             {
-                Id = e.Id!,
-                Nombre = e.Nombre,
-                empresa = e.Empresa.nombre,
-                Activo = e.Activo,
-                Descripcion = e.Descripcion,
+                Id = p.Id!,
+                Nombre = p.Nombre,
+                empresa = p.Empresa.nombre,
+                Activo = p.Activo,
+                empresa_id = p.Empresa_id,
+                Descripcion = p.Descripcion,
             });
             return PuestosDto;
         }
@@ -165,7 +169,6 @@ namespace AutoGestion.services
                 Id = puestoFound.Id!,
                 Nombre = puestoFound.Nombre,
                 Activo = puestoFound.Activo,
-                empresa = puestoFound.Empresa.nombre,
                 Descripcion = puestoFound.Descripcion
 
             };

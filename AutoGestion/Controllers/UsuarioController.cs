@@ -50,7 +50,7 @@ namespace AutoGestion.Controllers
 
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarioById(string id)
+        public async Task<ActionResult<Usuario>> GetUsuarioById(string id)
         {
             try
             {

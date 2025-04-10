@@ -1,5 +1,6 @@
 ﻿using AutoGestion.interfaces;
 using AutoGestion.interfaces.IEmpleado;
+using AutoGestion.models.Empresa;
 using AutoGestion.Models;
 using AutoGestion.Utils;
 
@@ -32,37 +33,86 @@ namespace AutoGestion.services
                 correo = e.correo,
                 edad = e.edad,
                 genero = e.genero,
-                puesto = e.Puesto.Nombre,
-                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin Empleado asignado",
+                puesto = e.Puesto != null ? e.Puesto.Nombre : "",
+                puesto_id = e.puesto_id,
+                jefe_id = e.jefe_id,
+                usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
+                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
-                empresa = e.Empresa.nombre,
-                usuario = e.Usuario?.usuario ?? ""
+                usuario = e.Usuario?.usuario ?? "",
+                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
+                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
+                {
+                    id = ee.Empresa.Id,
+                    nombre = ee.Empresa.nombre
+                }).ToList()
+            });
+
+            return empleadosDto;
+        }
+        public async Task<IEnumerable<EmpleadoDTO>> GetEmpleadosDisponibles()
+        {
+
+            var empleados = await _empleadoRepository.GetEmpleadosDisponibles();
+            if (empleados == null)
+            {
+                throw new KeyNotFoundException("Lista de empleados Vacia.");
+            }
+            var empleadosDto = empleados.Select(e => new EmpleadoDTO
+            {
+                id = e.id!,
+                nombre = e.nombre,
+                apellido = e.apellido,
+                correo = e.correo,
+                edad = e.edad,
+                genero = e.genero,
+                puesto = e.Puesto != null ? e.Puesto.Nombre : "",
+                puesto_id = e.puesto_id,
+                jefe_id = e.jefe_id,
+                usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
+                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
+                activo = e.activo,
+                usuario = e.Usuario?.usuario ?? "",
+                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
+                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
+                {
+                    id = ee.Empresa.Id,
+                    nombre = ee.Empresa.nombre
+                }).ToList()
             });
 
             return empleadosDto;
         }
         public async Task<EmpleadoDTO?> GetEmpleadoById(string id)
         {
-            var empleado = await _empleadoRepository.GetEmpleadoById(id);
+            var e = await _empleadoRepository.GetEmpleadoById(id);
 
-            if (empleado == null)
+            if (e == null)
             {
                 throw new KeyNotFoundException("Empleado no encontrado.");
             }
 
             var empleadoDto = new EmpleadoDTO
             {
-                id = empleado.id!,
-                nombre = empleado.nombre,
-                apellido = empleado.apellido,
-                correo = empleado.correo,
-                edad = empleado.edad,
-                puesto = empleado.Puesto.Nombre,
-                jefe = empleado.Jefe != null ? empleado.Jefe.nombre : "Sin Empleado asignado",
-                genero = empleado.genero,
-                activo = empleado.activo,
-                empresa = empleado.Empresa.nombre,
-                usuario = empleado.Usuario?.usuario ?? ""
+                id = e.id!,
+                nombre = e.nombre,
+                apellido = e.apellido,
+                correo = e.correo,
+                edad = e.edad,
+                genero = e.genero,
+                puesto = e.Puesto != null ? e.Puesto.Nombre : "",
+                puesto_id = e.puesto_id,
+                jefe_id = e.jefe_id,
+                usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
+                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
+                activo = e.activo,
+                usuario = e.Usuario?.usuario ?? "",
+                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
+                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
+                {
+                    id = ee.Empresa.Id,
+                    nombre = ee.Empresa.nombre
+                }).ToList()
             };
 
             return empleadoDto;
@@ -86,12 +136,20 @@ namespace AutoGestion.services
                 apellido = e.apellido,
                 correo = e.correo,
                 edad = e.edad,
-                puesto = e.Puesto.Nombre,
-                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin Empleado asignado",
                 genero = e.genero,
-                empresa = e.Empresa.nombre,
+                puesto = e.Puesto != null ? e.Puesto.Nombre : "",
+                puesto_id = e.puesto_id,
+                jefe_id = e.jefe_id,
+                usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
+                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
-                usuario = e.Usuario?.usuario ?? ""
+                usuario = e.Usuario?.usuario ?? "",
+                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
+                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
+                {
+                    id = ee.Empresa.Id,
+                    nombre = ee.Empresa.nombre
+                }).ToList()
             });
             return empleadosDto;
         }        
@@ -114,11 +172,19 @@ namespace AutoGestion.services
                 correo = e.correo,
                 edad = e.edad,
                 genero = e.genero,
-                puesto = e.Puesto.Nombre,
-                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin Empleado asignado",
-                empresa = e.Empresa.nombre,
+                puesto = e.Puesto != null ? e.Puesto.Nombre : "",
+                puesto_id = e.puesto_id,
+                jefe_id = e.jefe_id,
+                usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
+                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
-                usuario = e.Usuario?.usuario ?? ""
+                usuario = e.Usuario?.usuario ?? "",
+                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
+                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
+                {
+                    id = ee.Empresa.Id,
+                    nombre = ee.Empresa.nombre
+                }).ToList()
             });
             return empleadosDto;
         }
@@ -138,29 +204,63 @@ namespace AutoGestion.services
                 apellido = e.apellido,
                 correo = e.correo,
                 edad = e.edad,
-                puesto = e.Puesto.Nombre,
-                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin Empleado asignado",
                 genero = e.genero,
+                puesto = e.Puesto != null ? e.Puesto.Nombre : "",
+                puesto_id = e.puesto_id,
+                jefe_id = e.jefe_id,
+                usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
+                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
-                empresa = e.Empresa.nombre,
-                usuario = e.Usuario?.usuario ?? ""
+                usuario = e.Usuario?.usuario ?? "",
+                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
+                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
+                {
+                    id = ee.Empresa.Id,
+                    nombre = ee.Empresa.nombre
+                }).ToList()
             });
             return empleadosDto;
         }
 
-        public async Task<EmpleadoDTO> PostEmpleados(Empleado empleado)
+        public async Task<EmpleadoDTO> PostEmpleados(EmpleadoCreateDto empleadoCreateDto)
         {
             var token = _AsinacionesService.GetTokenFromHeader();
-            empleado.id = _AsinacionesService.GenerateNewId();
-            empleado.created_at = _AsinacionesService.GetCurrentDateTime();
-            empleado.updated_at = _AsinacionesService.GetCurrentDateTime();
-            if (string.IsNullOrEmpty(empleado.empresa_id))
+
+            // Crear el empleado
+            var empleado = new Empleado
             {
-                empleado.empresa_id = _AsinacionesService.GetClaimValue(token!, "IdEmpresa") ?? "Sistema";
+                id = _AsinacionesService.GenerateNewId(),
+                nombre = empleadoCreateDto.Nombre,
+                apellido = empleadoCreateDto.Apellido,
+                correo = empleadoCreateDto.Correo,
+                edad = empleadoCreateDto.Edad,
+                genero = empleadoCreateDto.Genero,
+                activo = empleadoCreateDto.Activo,
+                puesto_id = empleadoCreateDto.puesto_id,
+                jefe_id = empleadoCreateDto.jefe_id,
+                adicionado_por = _AsinacionesService.GetClaimValue(token!, "User") ?? "Sistema",
+                modificado_por = _AsinacionesService.GetClaimValue(token!, "User") ?? "Sistema",
+                created_at = _AsinacionesService.GetCurrentDateTime(),
+                updated_at = _AsinacionesService.GetCurrentDateTime(),
+            };
+
+            // Si jefe_id viene vacío, lo transformamos a null
+            if (string.IsNullOrWhiteSpace(empleado.jefe_id))
+            {
+                empleado.jefe_id = null;
             }
-            empleado.adicionado_por = _AsinacionesService.GetClaimValue(token!, "User") ?? "Sistema";
-            empleado.modificado_por = _AsinacionesService.GetClaimValue(token!, "User") ?? "Sistema";
+
+            // Guardar el empleado en la base de datos
             await _empleadoRepository.PostEmpleados(empleado);
+
+            // Asignar las empresas al empleado si existen los ids
+            if (empleadoCreateDto.EmpresaIds != null && empleadoCreateDto.EmpresaIds.Any())
+            {
+                // Asignar empresas usando el repositorio
+                await _empleadoRepository.AsignarEmpresaEmpleado(empleado.id, empleadoCreateDto.EmpresaIds);
+            }
+
+            // Devolver el DTO con la información básica del empleado
             return new EmpleadoDTO
             {
                 id = empleado.id,
@@ -171,40 +271,74 @@ namespace AutoGestion.services
                 edad = empleado.edad,
                 activo = empleado.activo,
                 usuario = empleado.Usuario?.usuario ?? ""
-
             };
-
         }
 
-        public async Task<EmpleadoDTO> PutEmpleados(string id, Empleado empleado)
+
+        public async Task<EmpleadoDTO> PutEmpleados(string id, EmpleadoCreateDto empleadoDto)
         {
             var empleadoFound = await _empleadoRepository.GetEmpleadoById(id);
-
             if (empleadoFound == null)
             {
                 throw new KeyNotFoundException("Empleado no encontrado.");
             }
+
+            if (string.IsNullOrWhiteSpace(empleadoDto.jefe_id))
+            {
+                empleadoDto.jefe_id = null;
+            }
+
             var token = _AsinacionesService.GetTokenFromHeader();
-            empleadoFound.ActualizarPropiedades(empleado);
-            empleadoFound.activo = empleado.activo;
-            empleado.empresa_id = _AsinacionesService.GetClaimValue(token!, "IdEmpresa") ?? "Sistema";
+
+            // Actualizar propiedades
+            empleadoFound.nombre = empleadoDto.Nombre;
+            empleadoFound.apellido = empleadoDto.Apellido;
+            empleadoFound.correo = empleadoDto.Correo;
+            empleadoFound.edad = empleadoDto.Edad;
+            empleadoFound.genero = empleadoDto.Genero;
+            empleadoFound.activo = empleadoDto.Activo;
+            empleadoFound.puesto_id = empleadoDto.puesto_id;
+            empleadoFound.jefe_id = empleadoDto.jefe_id;
             empleadoFound.updated_at = _AsinacionesService.GetCurrentDateTime();
             empleadoFound.modificado_por = _AsinacionesService.GetClaimValue(token!, "User") ?? "Sistema";
 
             await _empleadoRepository.PutEmpleados(id, empleadoFound);
+
+            // Actualizar empresas asignadas
+            if (empleadoDto.EmpresaIds != null && empleadoDto.EmpresaIds.Any())
+            {
+                await _empleadoRepository.AsignarEmpresaEmpleado(id, empleadoDto.EmpresaIds);
+            }
+
+            // Obtener nuevamente con relaciones
+            var empleadoUpdated = await _empleadoRepository.GetEmpleadoById(id);
+
             return new EmpleadoDTO
             {
-                id = empleadoFound.id!,
-                nombre = empleadoFound.nombre,
-                apellido = empleadoFound.apellido,
-                correo = empleadoFound.correo,
-                genero = empleadoFound.genero,
-                edad = empleadoFound.edad,
-                activo = empleadoFound.activo,
-                usuario = empleadoFound.Usuario?.usuario ?? ""
-
+                id = empleadoUpdated.id!,
+                nombre = empleadoUpdated.nombre,
+                apellido = empleadoUpdated.apellido,
+                correo = empleadoUpdated.correo,
+                genero = empleadoUpdated.genero,
+                edad = empleadoUpdated.edad,
+                activo = empleadoUpdated.activo,
+                puesto = empleadoUpdated.Puesto?.Nombre ?? "",
+                puesto_id = empleadoUpdated.puesto_id,
+                jefe_id = empleadoUpdated.jefe_id,
+                jefe = empleadoUpdated.Jefe?.nombre ?? "Sin jefe asignado",
+                usuario_id = empleadoUpdated.Usuario?.usuario ?? "Sin Usuario asignado",
+                usuario = empleadoUpdated.Usuario?.usuario ?? "",
+                Empresas = empleadoUpdated.EmpleadoEmpresas
+                    .Select(ee => new EmpresaSimpleDto
+                    {
+                        id = ee.Empresa.Id,
+                        nombre = ee.Empresa.nombre
+                    }).ToList()
             };
         }
+
+
+
 
     }
 }

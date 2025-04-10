@@ -1,4 +1,5 @@
 ﻿using AutoGestion.interfaces.Rol;
+using AutoGestion.models.Rol;
 using AutoGestion.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,14 +17,29 @@ namespace AutoGestion.repositories
         {
             return await _dbContextAutoGestion.Roles.ToListAsync();
         }
+        public async Task<IEnumerable<Permiso>> GetPermisos()
+        {
+            return await _dbContextAutoGestion.Permisos.ToListAsync();
+        }        
+        public async Task<IEnumerable<Permiso>> GetPermisosRol()
+        {
+            return await _dbContextAutoGestion.Permisos.ToListAsync();
+        }
         public async Task<IEnumerable<Role>> GetRolesActivos()
         {
             return await _dbContextAutoGestion.Roles.Where(r => r.Activo == true).ToArrayAsync();
         }
+
         public async Task<Role> GetRolesById(string id)
         {
-            return await _dbContextAutoGestion.Roles.Where(r => r.Id == id).FirstOrDefaultAsync();
+            return await _dbContextAutoGestion.Roles
+                .Where(r => r.Id == id)
+                .Include(r => r.RolePermisos)  // Incluimos la relación RolePermiso
+                .ThenInclude(rp => rp.Permiso)  // Incluimos los permisos a través de RolePermiso
+                .FirstOrDefaultAsync();  // Solo devolvemos la entidad Role completa con los permisos
         }
+
+
         public async Task<Role> PostRol(Role rol)
         {
             var rolCreate = await _dbContextAutoGestion.Roles.AddAsync(rol);

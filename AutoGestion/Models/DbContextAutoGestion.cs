@@ -1,7 +1,6 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace AutoGestion.Models // Aquí faltaban llaves para definir el espacio de nombres correctamente
+namespace AutoGestion.Models
 {
     public class DbContextAutoGestion : DbContext
     {
@@ -18,32 +17,39 @@ namespace AutoGestion.Models // Aquí faltaban llaves para definir el espacio de
         public DbSet<Puesto> Puesto { get; set; }
         public DbSet<ConfiguracionAprobacion> ConfiguracionAprobacion { get; set; }
 
+        // Nueva entidad para la relación muchos a muchos entre Empleado y Empresa
+        public DbSet<EmpleadoEmpresa> EmpleadoEmpresa { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configuración de RolePermiso (relación Role - Permiso)
             modelBuilder.Entity<RolePermiso>(entity =>
             {
-                entity
-                    .HasKey(rp => new { rp.RolId, rp.PermisoId });
+                entity.HasKey(rp => new { rp.RolId, rp.PermisoId });
 
-                entity
-                    .HasOne(rp => rp.Rol)
-                    .WithMany(r => r.RolePermisos)
-                    .HasForeignKey(rp => rp.RolId);
+                entity.HasOne(rp => rp.Rol)
+                      .WithMany(r => r.RolePermisos)
+                      .HasForeignKey(rp => rp.RolId);
 
-                entity
-                    .HasOne(rp => rp.Permiso)
-                    .WithMany(p => p.RolePermisos)
-                    .HasForeignKey(rp => rp.PermisoId);
-
-                entity
-                    .ToTable("RolePermiso");
-
+                entity.HasOne(rp => rp.Permiso)
+                      .WithMany(p => p.RolePermisos)
+                      .HasForeignKey(rp => rp.PermisoId);
             });
 
+            modelBuilder.Entity<EmpleadoEmpresa>(entity =>
+            {
+                entity.HasKey(ee => new { ee.EmpleadoId, ee.EmpresaId });
+
+                entity.HasOne(ee => ee.Empleado)
+                      .WithMany(e => e.EmpleadoEmpresas)
+                      .HasForeignKey(ee => ee.EmpleadoId);
+
+                entity.HasOne(ee => ee.Empresa)
+                      .WithMany(e => e.EmpleadoEmpresas)
+                      .HasForeignKey(ee => ee.EmpresaId);
+            });
 
             base.OnModelCreating(modelBuilder);
         }
-
-
     }
 }
