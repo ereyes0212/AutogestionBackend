@@ -45,9 +45,10 @@ namespace AutoGestion.Repositories
         public async Task<IEnumerable<ConfiguracionAprobacion>> GetAprobacionesByEmpresaId(string id)
         {
             return await _context.ConfiguracionAprobacion
-                .Where(c => c.Empresa_id == id)
                 .Include(c => c.Empresa)
                 .Include(c => c.Puesto)
+                .Where(c => c.Empresa.Id == id)
+                .OrderBy(c => c.nivel)
                 .ToListAsync();
         }
 

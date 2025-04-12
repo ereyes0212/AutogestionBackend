@@ -36,34 +36,49 @@ namespace AutoGestion.services
         }
         public string GenerateJwtToken<T>(T data)
         {
-            // Lista de Claims que se generarán dinámicamente
             var claims = new List<Claim>();
-
-            // Usamos reflexión para obtener las propiedades de T
             var properties = typeof(T).GetProperties();
 
             foreach (var property in properties)
             {
                 var propertyValue = property.GetValue(data);
+                if (propertyValue == null)
+                    continue;
 
-                if ( propertyValue is IEnumerable<string> list)
+                // Si la propiedad se llama "Empresas" y es una colección de objetos, iteramos para agregar un claim por cada elemento.
+                if (property.Name == "Empresas" && propertyValue is IEnumerable<object> empresas)
                 {
-                    foreach (var permiso in list)
+                    foreach (var empresa in empresas)
                     {
-                        claims.Add(new Claim(property.Name, permiso));
+                        // Obtener las propiedades "id" y "nombre" del objeto empresa
+                        var idProp = empresa.GetType().GetProperty("id")?.GetValue(empresa)?.ToString();
+                        var nombreProp = empresa.GetType().GetProperty("nombre")?.GetValue(empresa)?.ToString();
+
+                        if (!string.IsNullOrEmpty(idProp) && !string.IsNullOrEmpty(nombreProp))
+                        {
+                            // Agregar un claim con el valor formateado, por ejemplo "id|nombre"
+                            claims.Add(new Claim("Empresas", $"{idProp}|{nombreProp}"));
+                        }
+                    }
+                }
+                // Si es una lista de strings, los agregamos individualmente.
+                else if (propertyValue is IEnumerable<string> stringList)
+                {
+                    foreach (var s in stringList)
+                    {
+                        claims.Add(new Claim(property.Name, s));
                     }
                 }
                 else
                 {
-                    var valueString = propertyValue?.ToString();
+                    var valueString = propertyValue.ToString();
                     if (valueString != null)
+                    {
                         claims.Add(new Claim(property.Name, valueString));
+                    }
                 }
             }
 
-
-
-            // Generar el token JWT con los claims obtenidos
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
@@ -76,6 +91,7 @@ namespace AutoGestion.services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
         public string? GetClaimValue(string token, string claimType)
         {
             var handler = new JwtSecurityTokenHandler();

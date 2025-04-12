@@ -13,9 +13,13 @@ namespace AutoGestion.repositories
             _dbContextAutoGestion = dbContextAutoGestion;
         }
 
-        public async Task<Usuario> GetUserByUsername(string username) {
+        public async Task<Usuario> GetUserByUsername(string username)
+        {
             return await _dbContextAutoGestion.Usuarios
-                .Include(u => u.Role) 
+                .Include(u => u.Role)
+                .Include(u => u.Empleado)
+                    .ThenInclude(e => e.EmpleadoEmpresas)
+                        .ThenInclude(ee => ee.Empresa)
                 .FirstOrDefaultAsync(u => u.usuario == username);
         }
 

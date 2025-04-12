@@ -48,6 +48,21 @@ namespace AutoGestion.Controllers
             }
 
         }       
+        [HttpGet("profile")]
+        public async Task<ActionResult<Empleado>> GetProfile()
+        {
+            try
+            {
+                var empleados = await _empleadoService.GetProfile();
+
+                return Ok(empleados);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }        
         [HttpGet("empresaId")]
         public async Task<ActionResult<IEnumerable<Empleado>>> GetEmpleadosByEmpresaId()
         {

@@ -30,6 +30,13 @@ namespace AutoGestion.services
 
             var userPermissions = await _loginRepository.GetUserPermissions(user.id!);
 
+            var empresas = user.Empleado?.EmpleadoEmpresas
+                .Select(ee => new
+                {
+                    id = ee.Empresa.Id,
+                    nombre = ee.Empresa.nombre
+                }).ToList();
+
             var data = new
             {
                 IdUser = user.id,
@@ -37,10 +44,10 @@ namespace AutoGestion.services
                 Rol = user.Role!.Nombre,
                 IdRol = user.Role.Id,
                 IdEmpleado = user.empleado_id,
-                IdEmpresa = user.empleado_id,
+                Empresas = empresas,
                 Permiso = userPermissions
             };
-            
+
             var token = _asignaciones.GenerateJwtToken(data);
 
             return token;

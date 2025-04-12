@@ -11,4 +11,6 @@
 
     // Método para asignar empresas a un empleado
     Task AsignarEmpresaEmpleado(string empleadoId, List<string> empresaIds);
+    Task<Empleado> GetProfile(string idEmpleado);
+
 }

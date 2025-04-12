@@ -13,5 +13,7 @@ namespace AutoGestion.interfaces.IEmpleado
         Task<EmpleadoDTO> GetEmpleadoById(string id);
         Task<EmpleadoDTO> PostEmpleados(EmpleadoCreateDto empleado);
         Task<EmpleadoDTO> PutEmpleados(string id, EmpleadoCreateDto empleadoDto);
+        Task<EmpleadoDTO> GetProfile();
+
     }
 }

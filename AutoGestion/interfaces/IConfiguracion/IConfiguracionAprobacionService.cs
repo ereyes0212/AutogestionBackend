@@ -8,7 +8,7 @@ namespace AutoGestion.interfaces.IConfiguracion
     {
         Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobaciones();
         Task<ConfiguracionAprobacionDto> GetAprobacionById(string id);
-        Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobacionesByEmpresaId();
+        Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobacionesByEmpresaId(string id);
         Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobacionesActivas();
         Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobacionesActivasByEmpresaId();
         Task<IEnumerable<ConfiguracionAprobacionDto>> PostAprobaciones(IEnumerable<ConfiguracionAprobacion> configuraciones);

@@ -1,5 +1,4 @@
-﻿using AutoGestion.interfaces.IEmpleado;
-using AutoGestion.Models;
+﻿using AutoGestion.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoGestion.Repositories
@@ -19,6 +18,7 @@ namespace AutoGestion.Repositories
             return await _dbContextAutoGestion.Empleados
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
+                .Include(e => e.Jefe)
                 .Include(e => e.EmpleadoEmpresas)
                     .ThenInclude(ee => ee.Empresa)
                 .ToListAsync();
@@ -29,7 +29,9 @@ namespace AutoGestion.Repositories
         {
             return await _dbContextAutoGestion.Empleados
                 .Where(e => e.Usuario == null)
+                .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
+                .Include(e => e.Jefe)
                 .Include(e => e.EmpleadoEmpresas)
                     .ThenInclude(ee => ee.Empresa)
                 .ToListAsync();
@@ -42,6 +44,7 @@ namespace AutoGestion.Repositories
                 .Where(e => e.id == id)
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
+                .Include(e => e.Jefe)
                 .Include(e => e.EmpleadoEmpresas)
                     .ThenInclude(ee => ee.Empresa)
                 .FirstOrDefaultAsync();
@@ -54,11 +57,23 @@ namespace AutoGestion.Repositories
                 .Where(e => e.EmpleadoEmpresas.Any(ee => ee.Empresa.Id == id))
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
+                .Include(e => e.Jefe)
                 .Include(e => e.EmpleadoEmpresas)
                     .ThenInclude(ee => ee.Empresa)
                 .ToListAsync();
         }
 
+        public async Task<Empleado?> GetProfile(string idEmpleado)
+        {
+            return await _dbContextAutoGestion.Empleados
+                .Where(e => e.id == idEmpleado)
+                .Include(e => e.Usuario)
+                .Include(e => e.Puesto)
+                .Include(e => e.Jefe)
+                .Include(e => e.EmpleadoEmpresas)
+                    .ThenInclude(ee => ee.Empresa)
+                .FirstOrDefaultAsync();
+        }
         // Trae empleados activos
         public async Task<IEnumerable<Empleado>> GetEmpleadosActivos()
         {
@@ -66,6 +81,7 @@ namespace AutoGestion.Repositories
                 .Where(e => e.activo)
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
+                .Include(e => e.Jefe)
                 .Include(e => e.EmpleadoEmpresas)
                     .ThenInclude(ee => ee.Empresa)
                 .ToListAsync();
@@ -78,6 +94,7 @@ namespace AutoGestion.Repositories
                 .Where(e => e.activo && e.EmpleadoEmpresas.Any(ee => ee.Empresa.Id == id))
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
+                .Include(e => e.Jefe)
                 .Include(e => e.EmpleadoEmpresas)
                     .ThenInclude(ee => ee.Empresa)
                 .ToListAsync();

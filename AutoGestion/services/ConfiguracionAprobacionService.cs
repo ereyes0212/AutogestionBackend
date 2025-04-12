@@ -64,11 +64,10 @@ namespace AutoGestion.services
             return dto;
         }
 
-        public async Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobacionesByEmpresaId()
+        public async Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobacionesByEmpresaId(string id)
         {
-            var token = _asignacionesService.GetTokenFromHeader();
-            var empresaId = _asignacionesService.GetClaimValue(token!, "IdEmpresa");
-            var configs = await _configuracionRepository.GetAprobacionesByEmpresaId(empresaId);
+        
+            var configs = await _configuracionRepository.GetAprobacionesByEmpresaId(id);
             if (configs == null || !configs.Any())
             {
                 throw new KeyNotFoundException("No se encontraron configuraciones para la empresa.");

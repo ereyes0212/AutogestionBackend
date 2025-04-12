@@ -46,12 +46,12 @@ namespace AutoGestion.Controllers
             }
         }
 
-        [HttpGet("empresa/")]
-        public async Task<ActionResult<IEnumerable<ConfiguracionAprobacionDto>>> GetAprobacionesByEmpresaId()
+        [HttpGet("empresa/{id}")]
+        public async Task<ActionResult<IEnumerable<ConfiguracionAprobacionDto>>> GetAprobacionesByEmpresaId(string id)
         {
             try
             {
-                var aprobaciones = await _configuracionService.GetAprobacionesByEmpresaId();
+                var aprobaciones = await _configuracionService.GetAprobacionesByEmpresaId(id);
                 return Ok(aprobaciones);
             }
             catch (Exception)

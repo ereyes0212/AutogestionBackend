@@ -144,7 +144,6 @@ namespace AutoGestion.services
                 jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
                 usuario = e.Usuario?.usuario ?? "",
-                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
                 Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
                 {
                     id = ee.Empresa.Id,
@@ -152,7 +151,45 @@ namespace AutoGestion.services
                 }).ToList()
             });
             return empleadosDto;
-        }        
+        }
+
+        public async Task<EmpleadoDTO?> GetProfile()
+        {
+            var token = _AsinacionesService.GetTokenFromHeader();
+            var idEmpleado = _AsinacionesService.GetClaimValue(token!, "IdEmpleado");
+
+            var e = await _empleadoRepository.GetProfile(idEmpleado!);
+
+            if (e == null)
+            {
+                throw new KeyNotFoundException("Empleado no encontrado.");
+            }
+
+            var empleadoDto = new EmpleadoDTO
+            {
+                id = e.id!,
+                nombre = e.nombre,
+                apellido = e.apellido,
+                correo = e.correo,
+                edad = e.edad,
+                genero = e.genero,
+                puesto = e.Puesto != null ? e.Puesto.Nombre : "",
+                puesto_id = e.puesto_id,
+                jefe_id = e.jefe_id,
+                usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
+                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
+                activo = e.activo,
+                usuario = e.Usuario?.usuario ?? "",
+                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
+                {
+                    id = ee.Empresa.Id,
+                    nombre = ee.Empresa.nombre
+                }).ToList()
+            };
+
+            return empleadoDto;
+        }
+
         public async Task<IEnumerable<EmpleadoDTO?>> GetEmpleadosActivosByEmpresaId()
         {
             var token = _AsinacionesService.GetTokenFromHeader();
