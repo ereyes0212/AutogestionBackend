@@ -1,6 +1,4 @@
-﻿using AutoGestion.models.Rol;
-using AutoGestion.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿
 
 namespace AutoGestion.interfaces.Rol
 {

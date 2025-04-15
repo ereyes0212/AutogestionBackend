@@ -16,6 +16,9 @@ namespace AutoGestion.Models
         public DbSet<Empresa> Empresa { get; set; }
         public DbSet<Puesto> Puesto { get; set; }
         public DbSet<ConfiguracionAprobacion> ConfiguracionAprobacion { get; set; }
+        public DbSet<TipoSolicitud> TipoSolicitud { get; set; }
+        public DbSet<CamposTipoSolicitud> CampoTipoSolicitud { get; set; }
+
 
         // Nueva entidad para la relación muchos a muchos entre Empleado y Empresa
         public DbSet<EmpleadoEmpresa> EmpleadoEmpresa { get; set; }

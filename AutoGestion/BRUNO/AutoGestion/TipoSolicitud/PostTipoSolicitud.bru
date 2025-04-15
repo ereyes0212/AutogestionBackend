@@ -1,0 +1,22 @@
+meta {
+  name: PostTipoSolicitud
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{url}}/api/TipoSolicitud
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "Nombre": "Vacaciones",
+    "Descripcion": "Solicitud para perdir vacaciones"
+  }
+}

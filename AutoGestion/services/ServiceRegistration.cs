@@ -8,6 +8,7 @@ using AutoGestion.interfaces.Rol;
 using AutoGestion.interfaces.ILogin;
 using AutoGestion.interfaces.IPuesto;
 using AutoGestion.interfaces.IConfiguracion;
+using AutoGestion.interfaces.ICampoTipoSolicitud;
 
 public static class ServiceRegistration
 {
@@ -37,6 +38,14 @@ public static class ServiceRegistration
         //ConfiguracionAprobacion
         services.AddScoped<IConfiguracionAprobacionRepository, ConfiguracionAprobacionRepository>();
         services.AddScoped<IConfiguracionAprobacionService, ConfiguracionAprobacionService>();   
+        
+        //TipoSolicitud
+        services.AddScoped<ITipoSolicitudRepository, TipoSolicitudRepository>();
+        services.AddScoped<ITipoSolicitudService, TipoSolicitudService>();   
+        
+        //CampoTipoSolicitud
+        services.AddScoped<ICampoTipoSolicitudRepository, CampoTipoSolicitudRepository>();
+        services.AddScoped<ICampoTipoSolicitudService, CampoTipoSolicitudService>();   
 
         //Asignaciones
         services.AddScoped<IAsignaciones, AsingacionesService>(); 

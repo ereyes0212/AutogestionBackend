@@ -4,6 +4,7 @@ using AutoGestion.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoGestion.Migrations
 {
     [DbContext(typeof(DbContextAutoGestion))]
-    partial class DbContextAutoGestionModelSnapshot : ModelSnapshot
+    [Migration("20250414180022_AddTipoSolicitud")]
+    partial class AddTipoSolicitud
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,52 +24,6 @@ namespace AutoGestion.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("AutoGestion.Models.CamposTipoSolicitud", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<ulong>("Activo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Adicionado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("Created_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<ulong>("EsRequerido")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Modificado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nombre")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<string>("TipoCampo")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<string>("TipoSolicitudId")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<DateTime?>("Updated_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("nivel")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TipoSolicitudId");
-
-                    b.ToTable("CampoTipoSolicitud");
-                });
 
             modelBuilder.Entity("AutoGestion.Models.ConfiguracionAprobacion", b =>
                 {
@@ -431,15 +388,6 @@ namespace AutoGestion.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TipoSolicitud");
-                });
-
-            modelBuilder.Entity("AutoGestion.Models.CamposTipoSolicitud", b =>
-                {
-                    b.HasOne("TipoSolicitud", "TipoSolicitud")
-                        .WithMany()
-                        .HasForeignKey("TipoSolicitudId");
-
-                    b.Navigation("TipoSolicitud");
                 });
 
             modelBuilder.Entity("AutoGestion.Models.ConfiguracionAprobacion", b =>
