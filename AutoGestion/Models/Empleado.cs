@@ -10,10 +10,6 @@ public partial class Empleado
     [StringLength(36)]
     public string? id { get; set; }
 
-    // Se elimina la propiedad 'empresa_id' ya que la relación se manejará vía EmpleadoEmpresa.
-    // [StringLength(36)]
-    // public string? empresa_id { get; set; }
-
     [StringLength(36)]
     public string puesto_id { get; set; }
 
@@ -32,7 +28,8 @@ public partial class Empleado
     [EmailAddress]
     public string correo { get; set; }
 
-    public int? edad { get; set; }
+    public DateTime? FechaNacimiento { get; set; }
+    public int Vacaciones { get; set; }
 
     public string genero { get; set; }
 

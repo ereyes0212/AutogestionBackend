@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AutoGestion.Migrations
 {
     /// <inheritdoc />
-    public partial class AddInitDB : Migration
+    public partial class InitDataBase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -77,6 +77,30 @@ namespace AutoGestion.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "TipoSolicitud",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Descripcion = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    activo = table.Column<ulong>(type: "bit", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    adicionado_por = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    modificado_por = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoSolicitud", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -193,7 +217,8 @@ namespace AutoGestion.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     correo = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    edad = table.Column<int>(type: "int", nullable: true),
+                    FechaNacimiento = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Vacaciones = table.Column<int>(type: "int", nullable: false),
                     genero = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     activo = table.Column<ulong>(type: "bit", nullable: false),
@@ -249,6 +274,49 @@ namespace AutoGestion.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "SolicitudVacacion",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmpleadoId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PuestoId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaIngreso = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaSolicitud = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    PeriodoVacaciones = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DiasPendientesFecha = table.Column<int>(type: "int", nullable: false),
+                    TotalDiasAutorizados = table.Column<int>(type: "int", nullable: false),
+                    FechaGoce = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaRegreso = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    TotalDiasPendientes = table.Column<int>(type: "int", nullable: false),
+                    Aprobado = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Descripcion = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SolicitudVacacion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SolicitudVacacion_Empleados_EmpleadoId",
+                        column: x => x.EmpleadoId,
+                        principalTable: "Empleados",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SolicitudVacacion_Puesto_PuestoId",
+                        column: x => x.PuestoId,
+                        principalTable: "Puesto",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
                 {
@@ -283,6 +351,50 @@ namespace AutoGestion.Migrations
                         name: "FK_Usuarios_Roles_rol_id",
                         column: x => x.rol_id,
                         principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "SolicitudVacacionAprobacion",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    SolicitudVacacionId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConfiguracionAprobacionId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmpleadoAprobadorId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nivel = table.Column<int>(type: "int", nullable: false),
+                    Estado = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaDecision = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Comentarios = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SolicitudVacacionAprobacion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SolicitudVacacionAprobacion_ConfiguracionAprobacion_Configur~",
+                        column: x => x.ConfiguracionAprobacionId,
+                        principalTable: "ConfiguracionAprobacion",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SolicitudVacacionAprobacion_Empleados_EmpleadoAprobadorId",
+                        column: x => x.EmpleadoAprobadorId,
+                        principalTable: "Empleados",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_SolicitudVacacionAprobacion_SolicitudVacacion_SolicitudVacac~",
+                        column: x => x.SolicitudVacacionId,
+                        principalTable: "SolicitudVacacion",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -324,6 +436,31 @@ namespace AutoGestion.Migrations
                 column: "PermisoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SolicitudVacacion_EmpleadoId",
+                table: "SolicitudVacacion",
+                column: "EmpleadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SolicitudVacacion_PuestoId",
+                table: "SolicitudVacacion",
+                column: "PuestoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SolicitudVacacionAprobacion_ConfiguracionAprobacionId",
+                table: "SolicitudVacacionAprobacion",
+                column: "ConfiguracionAprobacionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SolicitudVacacionAprobacion_EmpleadoAprobadorId",
+                table: "SolicitudVacacionAprobacion",
+                column: "EmpleadoAprobadorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SolicitudVacacionAprobacion_SolicitudVacacionId",
+                table: "SolicitudVacacionAprobacion",
+                column: "SolicitudVacacionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Usuarios_empleado_id",
                 table: "Usuarios",
                 column: "empleado_id",
@@ -339,13 +476,16 @@ namespace AutoGestion.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ConfiguracionAprobacion");
-
-            migrationBuilder.DropTable(
                 name: "EmpleadoEmpresa");
 
             migrationBuilder.DropTable(
                 name: "RolePermiso");
+
+            migrationBuilder.DropTable(
+                name: "SolicitudVacacionAprobacion");
+
+            migrationBuilder.DropTable(
+                name: "TipoSolicitud");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");
@@ -354,10 +494,16 @@ namespace AutoGestion.Migrations
                 name: "Permisos");
 
             migrationBuilder.DropTable(
-                name: "Empleados");
+                name: "ConfiguracionAprobacion");
+
+            migrationBuilder.DropTable(
+                name: "SolicitudVacacion");
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Empleados");
 
             migrationBuilder.DropTable(
                 name: "Puesto");

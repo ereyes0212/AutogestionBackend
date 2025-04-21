@@ -1,0 +1,15 @@
+meta {
+  name: GetEmpleadosActivosByEmpresa
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{url}}/api/Empleado/activos/empresa
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

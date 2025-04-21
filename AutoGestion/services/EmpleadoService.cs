@@ -31,7 +31,8 @@ namespace AutoGestion.services
                 nombre = e.nombre,
                 apellido = e.apellido,
                 correo = e.correo,
-                edad = e.edad,
+                Vacaciones = e.Vacaciones,
+                FechaNacimiento = e.FechaNacimiento,
                 genero = e.genero,
                 puesto = e.Puesto != null ? e.Puesto.Nombre : "",
                 puesto_id = e.puesto_id,
@@ -64,8 +65,9 @@ namespace AutoGestion.services
                 nombre = e.nombre,
                 apellido = e.apellido,
                 correo = e.correo,
-                edad = e.edad,
+                FechaNacimiento = e.FechaNacimiento,
                 genero = e.genero,
+                Vacaciones = e.Vacaciones,
                 puesto = e.Puesto != null ? e.Puesto.Nombre : "",
                 puesto_id = e.puesto_id,
                 jefe_id = e.jefe_id,
@@ -98,7 +100,8 @@ namespace AutoGestion.services
                 nombre = e.nombre,
                 apellido = e.apellido,
                 correo = e.correo,
-                edad = e.edad,
+                Vacaciones = e.Vacaciones,
+                FechaNacimiento = e.FechaNacimiento,
                 genero = e.genero,
                 puesto = e.Puesto != null ? e.Puesto.Nombre : "",
                 puesto_id = e.puesto_id,
@@ -135,7 +138,8 @@ namespace AutoGestion.services
                 nombre = e.nombre,
                 apellido = e.apellido,
                 correo = e.correo,
-                edad = e.edad,
+                Vacaciones = e.Vacaciones,
+                FechaNacimiento = e.FechaNacimiento,
                 genero = e.genero,
                 puesto = e.Puesto != null ? e.Puesto.Nombre : "",
                 puesto_id = e.puesto_id,
@@ -171,10 +175,11 @@ namespace AutoGestion.services
                 nombre = e.nombre,
                 apellido = e.apellido,
                 correo = e.correo,
-                edad = e.edad,
+                FechaNacimiento = e.FechaNacimiento,
                 genero = e.genero,
                 puesto = e.Puesto != null ? e.Puesto.Nombre : "",
                 puesto_id = e.puesto_id,
+                Vacaciones = e.Vacaciones,
                 jefe_id = e.jefe_id,
                 usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
                 jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
@@ -207,7 +212,8 @@ namespace AutoGestion.services
                 nombre = e.nombre,
                 apellido = e.apellido,
                 correo = e.correo,
-                edad = e.edad,
+                Vacaciones = e.Vacaciones,
+                FechaNacimiento = e.FechaNacimiento,
                 genero = e.genero,
                 puesto = e.Puesto != null ? e.Puesto.Nombre : "",
                 puesto_id = e.puesto_id,
@@ -240,10 +246,11 @@ namespace AutoGestion.services
                 nombre = e.nombre,
                 apellido = e.apellido,
                 correo = e.correo,
-                edad = e.edad,
+                FechaNacimiento = e.FechaNacimiento,
                 genero = e.genero,
                 puesto = e.Puesto != null ? e.Puesto.Nombre : "",
                 puesto_id = e.puesto_id,
+                Vacaciones = e.Vacaciones,
                 jefe_id = e.jefe_id,
                 usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
                 jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
@@ -270,7 +277,8 @@ namespace AutoGestion.services
                 nombre = empleadoCreateDto.Nombre,
                 apellido = empleadoCreateDto.Apellido,
                 correo = empleadoCreateDto.Correo,
-                edad = empleadoCreateDto.Edad,
+                Vacaciones = 10,
+                FechaNacimiento = empleadoCreateDto.FechaNacimiento,
                 genero = empleadoCreateDto.Genero,
                 activo = empleadoCreateDto.Activo,
                 puesto_id = empleadoCreateDto.puesto_id,
@@ -304,8 +312,9 @@ namespace AutoGestion.services
                 nombre = empleado.nombre,
                 apellido = empleado.apellido,
                 correo = empleado.correo,
+                Vacaciones = empleado.Vacaciones,
                 genero = empleado.genero,
-                edad = empleado.edad,
+                FechaNacimiento = empleado.FechaNacimiento,
                 activo = empleado.activo,
                 usuario = empleado.Usuario?.usuario ?? ""
             };
@@ -327,13 +336,14 @@ namespace AutoGestion.services
 
             var token = _AsinacionesService.GetTokenFromHeader();
 
-            // Actualizar propiedades
+            // Actualizar propiFechaNacimientoes
             empleadoFound.nombre = empleadoDto.Nombre;
             empleadoFound.apellido = empleadoDto.Apellido;
             empleadoFound.correo = empleadoDto.Correo;
-            empleadoFound.edad = empleadoDto.Edad;
+            empleadoFound.FechaNacimiento = empleadoDto.FechaNacimiento;
             empleadoFound.genero = empleadoDto.Genero;
             empleadoFound.activo = empleadoDto.Activo;
+            empleadoFound.Vacaciones = empleadoDto.Vacaciones;
             empleadoFound.puesto_id = empleadoDto.puesto_id;
             empleadoFound.jefe_id = empleadoDto.jefe_id;
             empleadoFound.updated_at = _AsinacionesService.GetCurrentDateTime();
@@ -357,8 +367,9 @@ namespace AutoGestion.services
                 apellido = empleadoUpdated.apellido,
                 correo = empleadoUpdated.correo,
                 genero = empleadoUpdated.genero,
-                edad = empleadoUpdated.edad,
+                FechaNacimiento = empleadoUpdated.FechaNacimiento,
                 activo = empleadoUpdated.activo,
+                Vacaciones = empleadoUpdated.Vacaciones,
                 puesto = empleadoUpdated.Puesto?.Nombre ?? "",
                 puesto_id = empleadoUpdated.puesto_id,
                 jefe_id = empleadoUpdated.jefe_id,

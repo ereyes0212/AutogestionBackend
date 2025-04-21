@@ -8,7 +8,9 @@ using AutoGestion.interfaces.Rol;
 using AutoGestion.interfaces.ILogin;
 using AutoGestion.interfaces.IPuesto;
 using AutoGestion.interfaces.IConfiguracion;
-using AutoGestion.interfaces.ICampoTipoSolicitud;
+using AutoGestion.interfaces.ISolicitudVacaciones;
+using AutoGestion.Services.SolicitudVacaciones;
+using AutoGestion.Repositories.SolicitudVacaciones;
 
 public static class ServiceRegistration
 {
@@ -43,9 +45,9 @@ public static class ServiceRegistration
         services.AddScoped<ITipoSolicitudRepository, TipoSolicitudRepository>();
         services.AddScoped<ITipoSolicitudService, TipoSolicitudService>();   
         
-        //CampoTipoSolicitud
-        services.AddScoped<ICampoTipoSolicitudRepository, CampoTipoSolicitudRepository>();
-        services.AddScoped<ICampoTipoSolicitudService, CampoTipoSolicitudService>();   
+        //SolicitudVacaciones
+        services.AddScoped<ISolicitudVacacionesRepository, SolicitudVacacionesRepository>();
+        services.AddScoped<ISolicitudVacacionesService, SolicitudVacacionesService>();   
 
         //Asignaciones
         services.AddScoped<IAsignaciones, AsingacionesService>(); 

@@ -22,103 +22,120 @@ namespace AutoGestion.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("AutoGestion.Models.CamposTipoSolicitud", b =>
+            modelBuilder.Entity("AutoGestion.Models.AutoGestion.Models.SolicitudVacacion", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
 
-                    b.Property<ulong>("Activo")
-                        .HasColumnType("bit");
+                    b.Property<bool?>("Aprobado")
+                        .IsRequired()
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("Adicionado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("Created_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<ulong>("EsRequerido")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Modificado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Nombre")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<string>("TipoCampo")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<string>("TipoSolicitudId")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<DateTime?>("Updated_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("nivel")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TipoSolicitudId");
-
-                    b.ToTable("CampoTipoSolicitud");
-                });
-
-            modelBuilder.Entity("AutoGestion.Models.ConfiguracionAprobacion", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<ulong>("Activo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Adicionado_por")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("Created_at")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
 
-                    b.Property<string>("Empresa_id")
+                    b.Property<int>("DiasPendientesFecha")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmpleadoId")
+                        .IsRequired()
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
 
-                    b.Property<string>("Modificado_por")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                    b.Property<DateTime>("FechaGoce")
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<string>("Tipo")
+                    b.Property<DateTime>("FechaIngreso")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaRegreso")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaSolicitud")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PeriodoVacaciones")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PuestoId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<int>("TotalDiasAutorizados")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalDiasPendientes")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmpleadoId");
+
+                    b.HasIndex("PuestoId");
+
+                    b.ToTable("SolicitudVacacion");
+                });
+
+            modelBuilder.Entity("AutoGestion.Models.AutoGestion.Models.SolicitudVacacionAprobacion", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("Comentarios")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ConfiguracionAprobacionId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("EmpleadoAprobadorId")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("Estado")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<DateTime?>("Updated_at")
+                    b.Property<DateTime?>("FechaDecision")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("nivel")
+                    b.Property<int>("Nivel")
                         .HasColumnType("int");
 
-                    b.Property<string>("puesto_id")
+                    b.Property<string>("SolicitudVacacionId")
+                        .IsRequired()
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
 
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Empresa_id");
+                    b.HasIndex("ConfiguracionAprobacionId");
 
-                    b.HasIndex("puesto_id");
+                    b.HasIndex("EmpleadoAprobadorId");
 
-                    b.ToTable("ConfiguracionAprobacion");
+                    b.HasIndex("SolicitudVacacionId");
+
+                    b.ToTable("SolicitudVacacionAprobacion");
                 });
 
             modelBuilder.Entity("AutoGestion.Models.EmpleadoEmpresa", b =>
@@ -230,11 +247,70 @@ namespace AutoGestion.Migrations
                     b.ToTable("Usuarios");
                 });
 
+            modelBuilder.Entity("ConfiguracionAprobacion", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<ulong>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Adicionado_por")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("Created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Empresa_id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("Modificado_por")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime?>("Updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("nivel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("puesto_id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Empresa_id");
+
+                    b.HasIndex("puesto_id");
+
+                    b.ToTable("ConfiguracionAprobacion");
+                });
+
             modelBuilder.Entity("Empleado", b =>
                 {
                     b.Property<string>("id")
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
+
+                    b.Property<DateTime?>("FechaNacimiento")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Vacaciones")
+                        .HasColumnType("int");
 
                     b.Property<ulong>("activo")
                         .HasColumnType("bit");
@@ -253,9 +329,6 @@ namespace AutoGestion.Migrations
 
                     b.Property<DateTime?>("created_at")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("edad")
-                        .HasColumnType("int");
 
                     b.Property<string>("genero")
                         .IsRequired()
@@ -433,28 +506,48 @@ namespace AutoGestion.Migrations
                     b.ToTable("TipoSolicitud");
                 });
 
-            modelBuilder.Entity("AutoGestion.Models.CamposTipoSolicitud", b =>
+            modelBuilder.Entity("AutoGestion.Models.AutoGestion.Models.SolicitudVacacion", b =>
                 {
-                    b.HasOne("TipoSolicitud", "TipoSolicitud")
+                    b.HasOne("Empleado", "Empleado")
                         .WithMany()
-                        .HasForeignKey("TipoSolicitudId");
-
-                    b.Navigation("TipoSolicitud");
-                });
-
-            modelBuilder.Entity("AutoGestion.Models.ConfiguracionAprobacion", b =>
-                {
-                    b.HasOne("Empresa", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("Empresa_id");
+                        .HasForeignKey("EmpleadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("AutoGestion.Models.Puesto", "Puesto")
                         .WithMany()
-                        .HasForeignKey("puesto_id");
+                        .HasForeignKey("PuestoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Empresa");
+                    b.Navigation("Empleado");
 
                     b.Navigation("Puesto");
+                });
+
+            modelBuilder.Entity("AutoGestion.Models.AutoGestion.Models.SolicitudVacacionAprobacion", b =>
+                {
+                    b.HasOne("ConfiguracionAprobacion", "Configuracion")
+                        .WithMany()
+                        .HasForeignKey("ConfiguracionAprobacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Empleado", "EmpleadoAprobador")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoAprobadorId");
+
+                    b.HasOne("AutoGestion.Models.AutoGestion.Models.SolicitudVacacion", "SolicitudVacacion")
+                        .WithMany("Aprobaciones")
+                        .HasForeignKey("SolicitudVacacionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Configuracion");
+
+                    b.Navigation("EmpleadoAprobador");
+
+                    b.Navigation("SolicitudVacacion");
                 });
 
             modelBuilder.Entity("AutoGestion.Models.EmpleadoEmpresa", b =>
@@ -504,6 +597,21 @@ namespace AutoGestion.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("ConfiguracionAprobacion", b =>
+                {
+                    b.HasOne("Empresa", "Empresa")
+                        .WithMany()
+                        .HasForeignKey("Empresa_id");
+
+                    b.HasOne("AutoGestion.Models.Puesto", "Puesto")
+                        .WithMany()
+                        .HasForeignKey("puesto_id");
+
+                    b.Navigation("Empresa");
+
+                    b.Navigation("Puesto");
+                });
+
             modelBuilder.Entity("Empleado", b =>
                 {
                     b.HasOne("Empleado", "Jefe")
@@ -538,6 +646,11 @@ namespace AutoGestion.Migrations
                     b.Navigation("Permiso");
 
                     b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("AutoGestion.Models.AutoGestion.Models.SolicitudVacacion", b =>
+                {
+                    b.Navigation("Aprobaciones");
                 });
 
             modelBuilder.Entity("Empleado", b =>

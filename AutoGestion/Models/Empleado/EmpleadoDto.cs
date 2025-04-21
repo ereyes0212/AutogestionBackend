@@ -10,8 +10,9 @@ public class EmpleadoDTO
     public string nombre { get; set; }
     public string apellido { get; set; }
     public string correo { get; set; }
-    public int? edad { get; set; }
+    public DateTime? FechaNacimiento { get; set; }
     public string genero { get; set; }
+    public int  Vacaciones { get; set; }
     public bool activo { get; set; }
 
     public string usuario_id { get; set; }
@@ -32,9 +33,11 @@ public class EmpleadoCreateDto
     public string Nombre { get; set; }
     public string Apellido { get; set; }
     public string Correo { get; set; }
-    public int? Edad { get; set; }
+    public DateTime? FechaNacimiento { get; set; }
     public string Genero { get; set; }
     public bool Activo { get; set; }
+    public int Vacaciones { get; set; }
+
 
     // ID del usuario asociado al empleado
     public string? usuario_id { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoGestion.Models.AutoGestion.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoGestion.Models
 {
@@ -17,7 +18,8 @@ namespace AutoGestion.Models
         public DbSet<Puesto> Puesto { get; set; }
         public DbSet<ConfiguracionAprobacion> ConfiguracionAprobacion { get; set; }
         public DbSet<TipoSolicitud> TipoSolicitud { get; set; }
-        public DbSet<CamposTipoSolicitud> CampoTipoSolicitud { get; set; }
+        public DbSet<SolicitudVacacion> SolicitudVacacion { get; set; }
+        public DbSet<SolicitudVacacionAprobacion> SolicitudVacacionAprobacion { get; set; }
 
 
         // Nueva entidad para la relación muchos a muchos entre Empleado y Empresa
