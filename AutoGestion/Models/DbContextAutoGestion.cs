@@ -1,4 +1,4 @@
-﻿using AutoGestion.Models.AutoGestion.Models;
+﻿
 using Microsoft.EntityFrameworkCore;
 
 namespace AutoGestion.Models

@@ -8,9 +8,9 @@ using AutoGestion.interfaces.Rol;
 using AutoGestion.interfaces.ILogin;
 using AutoGestion.interfaces.IPuesto;
 using AutoGestion.interfaces.IConfiguracion;
-using AutoGestion.interfaces.ISolicitudVacaciones;
 using AutoGestion.Services.SolicitudVacaciones;
 using AutoGestion.Repositories.SolicitudVacaciones;
+using AutoGestion.Interfaces.ISolicitudVacaciones;
 
 public static class ServiceRegistration
 {

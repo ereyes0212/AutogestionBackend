@@ -36,6 +36,17 @@ namespace AutoGestion.Repositories
                     .ThenInclude(ee => ee.Empresa)
                 .ToListAsync();
         }
+        public async Task<Empleado> GetEmpleadoByPuesto(string id)
+        {
+            return await _dbContextAutoGestion.Empleados
+                .Where(e => e.puesto_id == id)
+                .Include(e => e.Puesto)
+                .Include(e => e.Jefe)
+                .Include(e => e.EmpleadoEmpresas)
+                    .ThenInclude(ee => ee.Empresa)
+                .FirstOrDefaultAsync();
+        }
+
 
         // Trae un empleado por Id, incluyendo Usuario, Puesto y las empresas asociadas
         public async Task<Empleado?> GetEmpleadoById(string id)

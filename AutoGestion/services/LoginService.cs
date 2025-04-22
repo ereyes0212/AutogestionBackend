@@ -45,7 +45,9 @@ namespace AutoGestion.services
                 IdRol = user.Role.Id,
                 IdEmpleado = user.empleado_id,
                 Empresas = empresas,
-                Permiso = userPermissions
+                Permiso = userPermissions,
+                Puesto = user.Empleado!.Puesto!.Nombre,
+                PuestoId = user.Empleado.Puesto.Id
             };
 
             var token = _asignaciones.GenerateJwtToken(data);

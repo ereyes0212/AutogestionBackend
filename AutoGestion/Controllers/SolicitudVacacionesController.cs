@@ -1,7 +1,10 @@
-﻿using AutoGestion.Models.SolicitudVacacionesDto;
-using AutoGestion.interfaces.ISolicitudVacaciones;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoGestion.Models.SolicitudVacacionesDto;
+using AutoGestion.Interfaces.ISolicitudVacaciones;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AutoGestion.services;
 
 namespace AutoGestion.Controllers
 {
@@ -17,74 +20,64 @@ namespace AutoGestion.Controllers
             _solicitudService = solicitudService;
         }
 
+        // GET api/solicitudvacaciones
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SolicitudVacacionDto>>> GetSolicitudes()
+        public async Task<ActionResult<IEnumerable<SolicitudVacacionDto>>> GetSolicitudesAsync()
         {
-            try
-            {
-                var solicitudes = await _solicitudService.GetSolicitudes();
-                return Ok(solicitudes);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            var solicitudes = await _solicitudService.GetSolicitudesAsync();
+            return Ok(solicitudes);
         }
 
+        // GET api/solicitudvacaciones/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<SolicitudVacacionDto>> GetSolicitudById(string id)
+        public async Task<ActionResult<SolicitudVacacionDto>> GetSolicitudByIdAsync(string id)
         {
-            try
-            {
-                var solicitud = await _solicitudService.GetSolicitudById(id);
-                return Ok(solicitud);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            var solicitud = await _solicitudService.GetSolicitudByIdAsync(id);
+            return Ok(solicitud);
         }
 
-        [HttpGet("empleado/{empleadoId}")]
-        public async Task<ActionResult<IEnumerable<SolicitudVacacionDto>>> GetSolicitudesPorEmpleado(string empleadoId)
+        // GET api/solicitudvacaciones/empleado/{empleadoId}
+        [HttpGet("empleado/")]
+        public async Task<ActionResult<IEnumerable<SolicitudVacacionDto>>> GetSolicitudesPorEmpleadoAsync()
         {
-            try
-            {
-                var solicitudes = await _solicitudService.GetSolicitudesPorEmpleado(empleadoId);
-                return Ok(solicitudes);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            var solicitudes = await _solicitudService.GetSolicitudesPorEmpleadoAsync();
+            return Ok(solicitudes);
         }
 
+        // POST api/solicitudvacaciones
         [HttpPost]
-        public async Task<ActionResult<SolicitudVacacionDto>> CrearSolicitud([FromBody] SolicitudVacacionCreateDto solicitud)
+        public async Task<ActionResult<SolicitudVacacionDto>> CrearSolicitudAsync([FromBody] SolicitudVacacionCreateDto dto)
         {
             try
             {
-                var nuevaSolicitud = await _solicitudService.CrearSolicitud(solicitud);
+                var nuevaSolicitud = await _solicitudService.CrearSolicitudAsync(dto);
                 return Ok(nuevaSolicitud);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
         }
 
+        // PUT api/solicitudvacaciones/{id}/aprobar?nivel=1&aprobado=true&comentarios=OK
         [HttpPut("{id}/aprobar")]
-        public async Task<ActionResult<SolicitudVacacionDto>> ProcesarAprobacion(string id, [FromQuery] int nivel, [FromQuery] bool aprobado, [FromQuery] string comentarios)
+        public async Task<ActionResult<SolicitudVacacionDto>> ProcesarAprobacionAsync(
+            string id,
+            [FromQuery] int nivel,
+            [FromQuery] bool aprobado,
+            [FromQuery] string comentarios)
         {
-            try
-            {
-                var solicitudActualizada = await _solicitudService.ProcesarAprobacion(id, nivel, aprobado, comentarios);
-                return Ok(solicitudActualizada);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            var solicitudActualizada = await _solicitudService
+                .ProcesarAprobacionAsync(id, nivel, aprobado, comentarios);
+            return Ok(solicitudActualizada);
         }
+
+        [HttpGet("aprobaciones/empleado")]
+        public async Task<ActionResult<IEnumerable<AprobacionVacacionDto>>> GetAprobacionesPorEmpleado()
+        {
+            var aprobaciones = await _solicitudService.GetAprobacionesPorEmpleado();
+            return Ok(aprobaciones);
+        }
+
     }
 }

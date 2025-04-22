@@ -2,6 +2,7 @@
 {
     Task<IEnumerable<Empleado>> GetEmpleados();
     Task<Empleado> GetEmpleadoById(string id);
+    Task<Empleado> GetEmpleadoByPuesto(string id);
     Task<IEnumerable<Empleado>> GetEmpleadoByEmpresaId(string id);
     Task<IEnumerable<Empleado>> GetEmpleadosActivos();
     Task<IEnumerable<Empleado>> GetEmpleadosDisponibles();

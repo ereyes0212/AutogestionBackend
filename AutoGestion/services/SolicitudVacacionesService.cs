@@ -1,15 +1,9 @@
-﻿// AutoGestion.Services/SolicitudVacaciones/SolicitudVacacionesService.cs
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoGestion.interfaces.IConfiguracion;
-using AutoGestion.interfaces.ISolicitudVacaciones;
-using AutoGestion.interfaces;
+﻿
+using AutoGestion.Interfaces.ISolicitudVacaciones;         
 using AutoGestion.Models;
-using AutoGestion.Models.AutoGestion.Models;
 using AutoGestion.Models.SolicitudVacacionesDto;
-using AutoGestion.services;
+using AutoGestion.interfaces.IConfiguracion;
+using AutoGestion.interfaces;
 
 namespace AutoGestion.Services.SolicitudVacaciones
 {
@@ -17,101 +11,145 @@ namespace AutoGestion.Services.SolicitudVacaciones
     {
         private readonly ISolicitudVacacionesRepository _repo;
         private readonly IConfiguracionAprobacionRepository _cfgRepo;
+        private readonly IEmpleadoRepository _empleadoRepo;
         private readonly IAsignaciones _utils;
 
         public SolicitudVacacionesService(
             ISolicitudVacacionesRepository repo,
             IConfiguracionAprobacionRepository cfgRepo,
+            IEmpleadoRepository empleadoRepo,
             IAsignaciones utils)
         {
             _repo = repo;
             _cfgRepo = cfgRepo;
             _utils = utils;
+            _empleadoRepo = empleadoRepo;
         }
 
-        public async Task<IEnumerable<SolicitudVacacionDto>> GetSolicitudes()
+        public async Task<IEnumerable<SolicitudVacacionDto>> GetSolicitudesAsync()
         {
-            var list = await _repo.GetSolicitudes();
+            var list = await _repo.GetSolicitudesAsync();
             return list.Select(MapToDto);
         }
 
-        public async Task<SolicitudVacacionDto> GetSolicitudById(string id)
+        public async Task<SolicitudVacacionDto> GetSolicitudByIdAsync(string id)
         {
-            var sol = await _repo.GetSolicitudById(id)
+            var sol = await _repo.GetSolicitudByIdAsync(id)
                       ?? throw new KeyNotFoundException("Solicitud no encontrada");
             return MapToDto(sol);
         }
 
-        public async Task<IEnumerable<SolicitudVacacionDto>> GetSolicitudesPorEmpleado(string empleadoId)
+        public async Task<IEnumerable<SolicitudVacacionDto>> GetSolicitudesPorEmpleadoAsync()
         {
-            var list = await _repo.GetSolicitudesPorEmpleado(empleadoId);
+            var token = _utils.GetTokenFromHeader();
+            var IdEmpleado = _utils.GetClaimValue(token!, "IdEmpleado");
+            var list = await _repo.GetSolicitudesPorEmpleadoAsync(IdEmpleado);
             return list.Select(MapToDto);
         }
 
-        public async Task<SolicitudVacacionDto> CrearSolicitud(SolicitudVacacionCreateDto dto)
+        public async Task<SolicitudVacacionDto> CrearSolicitudAsync(SolicitudVacacionCreateDto dto)
         {
-            // Mapear DTO → Entidad básica
+            var token = _utils.GetTokenFromHeader();
+            var IdEmpleado = _utils.GetClaimValue(token!, "IdEmpleado");
+            var PuestoId = _utils.GetClaimValue(token!, "PuestoId");
+
+            // Obtener las configuraciones de aprobación activas para la empresa
+            var cfgs = await _cfgRepo.GetAprobacionesActivosByEmpresaId(dto.EmpresaId);
+
+            // Validación de fechas
+            if (dto.FechaFin < dto.FechaInicio)
+                throw new ArgumentException("FechaFin debe ser igual o posterior a FechaInicio");
+
+            // Crear la solicitud de vacaciones
             var sol = new SolicitudVacacion
             {
                 Id = _utils.GenerateNewId(),
-                EmpleadoId = dto.EmpleadoId,
-                FechaIngreso = dto.FechaIngreso,
+                EmpleadoId = IdEmpleado,
+                PuestoId = PuestoId,
                 FechaSolicitud = DateTime.UtcNow,
-                FechaGoce = dto.FechaInicio,
-                FechaRegreso = dto.FechaFin,
+                FechaInicio = dto.FechaInicio,
+                FechaFin = dto.FechaFin,
                 Descripcion = dto.Descripcion,
-                PeriodoVacaciones = "prueba",
-                PuestoId= dto.PuestoId,
-                DiasPendientesFecha = dto.DiasPendientesFecha,
-                TotalDiasAutorizados = dto.TotalDiasSolicitados,
-                TotalDiasPendientes = dto.DiasPendientesFecha - dto.TotalDiasSolicitados,
-                Aprobado = false,
+                Aprobado = null,
                 CreatedAt = DateTime.UtcNow
             };
 
-            // Inicializar pasos según configuración
-            var cfgs = await _cfgRepo.GetAprobacionesActivosByEmpresaId(dto.EmpresaId);
-            sol.Aprobaciones = cfgs.Select(c => new SolicitudVacacionAprobacion
-            {
-                Id = _utils.GenerateNewId(),
-                ConfiguracionAprobacionId = c.Id!,
-                Nivel = c.nivel,
-                Estado = "Pendiente",
-                CreatedAt = DateTime.UtcNow
-            }).ToList();
+            // Obtener las aprobaciones asociadas con la solicitud
+            sol.Aprobaciones = new List<SolicitudVacacionAprobacion>();
 
-            var created = await _repo.AddSolicitud(sol);
+            foreach (var cfg in cfgs)
+            {
+                var aprobacion = new SolicitudVacacionAprobacion
+                {
+                    Id = _utils.GenerateNewId(),
+                    ConfiguracionAprobacionId = cfg.Id!,
+                    Nivel = cfg.nivel,
+                    Estado = "Pendiente",
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                // Verificar si el puesto es fijo o dinámico
+                if (cfg.Tipo == "Fijo")
+                {
+                    // Asignar el empleado correspondiente para aprobar la solicitud (fijo)
+                    var empleado = await _empleadoRepo.GetEmpleadoByPuesto(cfg.puesto_id);
+
+                    aprobacion.EmpleadoAprobadorId = empleado.id; // empleado asignado al puesto fijo
+                }
+                else if (cfg.Tipo == "Dinamico")
+                {
+                    // Si el puesto es dinámico, obtener el jefe del empleado que hace la solicitud
+                    var jefeEmpleado = await _empleadoRepo.GetEmpleadoById(IdEmpleado);
+                    if (jefeEmpleado != null)
+                    {
+                        aprobacion.EmpleadoAprobadorId = jefeEmpleado.jefe_id; // Asignar al jefe para aprobar
+                    }
+                    else
+                    {
+                        throw new ArgumentException("No se pudo encontrar el jefe del empleado para la aprobación dinámica");
+                    }
+                }
+
+                sol.Aprobaciones.Add(aprobacion);
+            }
+
+            // Guardar la solicitud en el repositorio
+            var created = await _repo.AddSolicitudAsync(sol);
+
             return MapToDto(created);
         }
 
-        public async Task<SolicitudVacacionDto> ProcesarAprobacion(string solicitudId, int nivel, bool aprobado, string comentarios)
+        public async Task<SolicitudVacacionDto> ProcesarAprobacionAsync(
+            string solicitudId,
+            int nivel,
+            bool aprobado,
+            string comentarios)
         {
             var token = _utils.GetTokenFromHeader();
 
-            var sol = await _repo.GetSolicitudById(solicitudId)
+            var sol = await _repo.GetSolicitudByIdAsync(solicitudId)
                       ?? throw new KeyNotFoundException("Solicitud no encontrada");
 
-            var paso = sol.Aprobaciones.FirstOrDefault(a => a.Nivel == nivel)
+            var paso = sol.Aprobaciones
+                          .FirstOrDefault(a => a.Nivel == nivel)
                        ?? throw new InvalidOperationException($"No existe el paso de nivel {nivel}");
 
+            // 5) actualizar paso
             paso.Estado = aprobado ? "Aprobado" : "Rechazado";
             paso.Comentarios = comentarios;
             paso.EmpleadoAprobadorId = _utils.GetClaimValue(token!, "IdEmpleado") ?? "Sistema";
             paso.FechaDecision = DateTime.UtcNow;
             paso.UpdatedAt = DateTime.UtcNow;
 
+            // 6) actualizar estado global
             if (!aprobado)
-            {
                 sol.Aprobado = false;
-            }
             else if (sol.Aprobaciones.All(a => a.Estado == "Aprobado"))
-            {
                 sol.Aprobado = true;
-            }
 
             sol.UpdatedAt = DateTime.UtcNow;
-            await _repo.UpdateSolicitud(sol);
 
+            await _repo.UpdateSolicitudAsync(sol);
             return MapToDto(sol);
         }
 
@@ -119,29 +157,69 @@ namespace AutoGestion.Services.SolicitudVacaciones
         {
             Id = s.Id,
             EmpleadoId = s.EmpleadoId,
-            NombreEmpleado = s.Empleado?.nombre + " " + s.Empleado?.apellido,
-            FechaIngreso = s.FechaIngreso,
+            NombreEmpleado = $"{s.Empleado?.nombre} {s.Empleado?.apellido}",
+            PuestoId = s.PuestoId,
+            Puesto = s.Puesto.Nombre,
             FechaSolicitud = s.FechaSolicitud,
-            FechaInicio = s.FechaGoce,
-            FechaFin = s.FechaRegreso,
-            TotalDiasSolicitados = s.TotalDiasAutorizados,
-            DiasPendientes = s.TotalDiasPendientes,
+            FechaInicio = s.FechaInicio,
+            FechaFin = s.FechaFin,
+            DiasSolicitados = s.DiasSolicitados,
             Aprobado = s.Aprobado,
             Descripcion = s.Descripcion,
             Aprobaciones = s.Aprobaciones
-                                   .OrderBy(a => a.Nivel)
-                                   .Select(a => new AprobacionVacacionDto
-                                   {
-                                       Id = a.Id,
-                                       Nivel = a.Nivel,
-                                       Aprobado = a.Estado == "Aprobado"
-                                                           ? (bool?)true
-                                                           : a.Estado == "Rechazado"
-                                                             ? (bool?)false
-                                                             : null,
-                                       Comentario = a.Comentarios,
-                                       FechaAprobacion = a.FechaDecision
-                                   }).ToList()
+                                  .OrderBy(a => a.Nivel)
+                                  .Select(a => new AprobacionVacacionDto
+                                  {
+                                      Id = a.Id,
+                                      Nivel = a.Nivel,
+                                      Aprobado = a.Estado == "Aprobado"
+                                                          ? (bool?)true
+                                                          : a.Estado == "Rechazado"
+                                                            ? (bool?)false
+                                                            : null,
+                                      Comentario = a.Comentarios,
+                                      FechaAprobacion = a.FechaDecision
+                                  })
+                                  .ToList()
         };
+
+        public async Task<IEnumerable<AprobacionVacacionDto>> GetAprobacionesPorEmpleado()
+        {
+            var token = _utils.GetTokenFromHeader();
+            var empleadoId = _utils.GetClaimValue(token!, "IdEmpleado");
+
+            if (empleadoId == null)
+                throw new UnauthorizedAccessException("No se pudo identificar el empleado.");
+
+            var aprobaciones = await _repo.GetAprobacionesPorEmpleado(empleadoId);
+
+            return aprobaciones.Select(a => new AprobacionVacacionDto
+            {
+                Id = a.Id,
+                Nivel = a.Nivel,
+                Aprobado = a.Estado == "Aprobado"
+                            ? (bool?)true
+                            : a.Estado == "Rechazado"
+                                ? (bool?)false
+                                : null,
+                Comentario = a.Comentarios,
+                FechaAprobacion = a.FechaDecision,
+
+                EmpleadoId = a.SolicitudVacacion?.EmpleadoId,
+                NombreEmpleado = a.SolicitudVacacion?.Empleado != null
+                                    ? $"{a.SolicitudVacacion.Empleado.nombre} {a.SolicitudVacacion.Empleado.apellido}"
+                                    : "",
+                PuestoId = a.SolicitudVacacion?.PuestoId,
+                FechaSolicitud = a.SolicitudVacacion?.FechaSolicitud,
+                FechaInicio = a.SolicitudVacacion?.FechaInicio,
+                FechaFin = a.SolicitudVacacion?.FechaFin,
+                DiasSolicitados = a.SolicitudVacacion != null
+                                    ? (a.SolicitudVacacion.FechaFin - a.SolicitudVacacion.FechaInicio).Days + 1
+                                    : 0,
+                Descripcion = a.SolicitudVacacion?.Descripcion,
+            }).ToList();
+        }
+
+
     }
 }

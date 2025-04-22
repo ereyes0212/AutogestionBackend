@@ -1,13 +1,16 @@
-﻿using AutoGestion.Models.AutoGestion.Models;
+﻿
+using AutoGestion.Models;
 
-namespace AutoGestion.interfaces.ISolicitudVacaciones
+namespace AutoGestion.Interfaces.ISolicitudVacaciones
 {
     public interface ISolicitudVacacionesRepository
     {
-        Task<IEnumerable<SolicitudVacacion>> GetSolicitudes();
-        Task<SolicitudVacacion> GetSolicitudById(string id);
-        Task<IEnumerable<SolicitudVacacion>> GetSolicitudesPorEmpleado(string empleadoId);
-        Task<SolicitudVacacion> AddSolicitud(SolicitudVacacion solicitud);
-        Task<SolicitudVacacion> UpdateSolicitud(SolicitudVacacion solicitud);
+        Task<IEnumerable<SolicitudVacacion>> GetSolicitudesAsync();
+        Task<SolicitudVacacion?> GetSolicitudByIdAsync(string id);
+        Task<IEnumerable<SolicitudVacacion>> GetSolicitudesPorEmpleadoAsync(string empleadoId);
+        Task<IEnumerable<SolicitudVacacionAprobacion>> GetAprobacionesPorEmpleado(string empleadoId);
+
+        Task<SolicitudVacacion> AddSolicitudAsync(SolicitudVacacion solicitud);
+        Task<SolicitudVacacion> UpdateSolicitudAsync(SolicitudVacacion solicitud);
     }
 }

@@ -283,16 +283,10 @@ namespace AutoGestion.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PuestoId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    FechaIngreso = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     FechaSolicitud = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PeriodoVacaciones = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DiasPendientesFecha = table.Column<int>(type: "int", nullable: false),
-                    TotalDiasAutorizados = table.Column<int>(type: "int", nullable: false),
-                    FechaGoce = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    FechaRegreso = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    TotalDiasPendientes = table.Column<int>(type: "int", nullable: false),
-                    Aprobado = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    FechaInicio = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    FechaFin = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Aprobado = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     Descripcion = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
