@@ -1,5 +1,5 @@
 ﻿using AutoGestion.interfaces.IPuesto;
-using AutoGestion.models.Empresa;
+
 using AutoGestion.Models;
 using AutoGestion.services;
 using Microsoft.AspNetCore.Authorization;

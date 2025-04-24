@@ -52,6 +52,4 @@ public partial class Empleado
 
     public Usuario? Usuario { get; set; }
 
-    // Nueva relación muchos a muchos con Empresa a través de EmpleadoEmpresa
-    public ICollection<EmpleadoEmpresa> EmpleadoEmpresas { get; set; } = new List<EmpleadoEmpresa>();
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoGestion.Migrations
 {
     [DbContext(typeof(DbContextAutoGestion))]
-    [Migration("20250422164626_InitDataBase")]
+    [Migration("20250423142806_InitDataBase")]
     partial class InitDataBase
     {
         /// <inheritdoc />
@@ -24,23 +24,6 @@ namespace AutoGestion.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("AutoGestion.Models.EmpleadoEmpresa", b =>
-                {
-                    b.Property<string>("EmpleadoId")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<string>("EmpresaId")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.HasKey("EmpleadoId", "EmpresaId");
-
-                    b.HasIndex("EmpresaId");
-
-                    b.ToTable("EmpleadoEmpresa");
-                });
 
             modelBuilder.Entity("AutoGestion.Models.Puesto", b =>
                 {
@@ -62,10 +45,6 @@ namespace AutoGestion.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Empresa_id")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
                     b.Property<string>("Modificado_por")
                         .HasColumnType("longtext");
 
@@ -78,8 +57,6 @@ namespace AutoGestion.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Empresa_id");
 
                     b.ToTable("Puesto");
                 });
@@ -254,10 +231,6 @@ namespace AutoGestion.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("Empresa_id")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
                     b.Property<string>("Modificado_por")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
@@ -278,8 +251,6 @@ namespace AutoGestion.Migrations
                         .HasColumnType("varchar(36)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Empresa_id");
 
                     b.HasIndex("puesto_id");
 
@@ -347,37 +318,6 @@ namespace AutoGestion.Migrations
                     b.HasIndex("puesto_id");
 
                     b.ToTable("Empleados");
-                });
-
-            modelBuilder.Entity("Empresa", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<ulong>("activo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("adicionado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("created_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("modificado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("nombre")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<DateTime?>("updated_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Empresa");
                 });
 
             modelBuilder.Entity("Permiso", b =>
@@ -492,34 +432,6 @@ namespace AutoGestion.Migrations
                     b.ToTable("TipoSolicitud");
                 });
 
-            modelBuilder.Entity("AutoGestion.Models.EmpleadoEmpresa", b =>
-                {
-                    b.HasOne("Empleado", "Empleado")
-                        .WithMany("EmpleadoEmpresas")
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Empresa", "Empresa")
-                        .WithMany("EmpleadoEmpresas")
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Empleado");
-
-                    b.Navigation("Empresa");
-                });
-
-            modelBuilder.Entity("AutoGestion.Models.Puesto", b =>
-                {
-                    b.HasOne("Empresa", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("Empresa_id");
-
-                    b.Navigation("Empresa");
-                });
-
             modelBuilder.Entity("AutoGestion.Models.SolicitudVacacion", b =>
                 {
                     b.HasOne("Empleado", "Empleado")
@@ -585,15 +497,9 @@ namespace AutoGestion.Migrations
 
             modelBuilder.Entity("ConfiguracionAprobacion", b =>
                 {
-                    b.HasOne("Empresa", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("Empresa_id");
-
                     b.HasOne("AutoGestion.Models.Puesto", "Puesto")
                         .WithMany()
                         .HasForeignKey("puesto_id");
-
-                    b.Navigation("Empresa");
 
                     b.Navigation("Puesto");
                 });
@@ -641,14 +547,7 @@ namespace AutoGestion.Migrations
 
             modelBuilder.Entity("Empleado", b =>
                 {
-                    b.Navigation("EmpleadoEmpresas");
-
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("Empresa", b =>
-                {
-                    b.Navigation("EmpleadoEmpresas");
                 });
 
             modelBuilder.Entity("Permiso", b =>

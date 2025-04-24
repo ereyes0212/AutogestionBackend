@@ -1,8 +1,4 @@
-﻿public class EmpresaSimpleDto
-{
-    public string id { get; set; }
-    public string nombre { get; set; }
-}
+﻿
 
 public class EmpleadoDTO
 {
@@ -23,9 +19,6 @@ public class EmpleadoDTO
 
     public string jefe { get; set; }
     public string jefe_id { get; set; }
-
-    // Nueva propiedad: Lista de empresas a las que pertenece el empleado (relación muchos a muchos)
-    public List<EmpresaSimpleDto> Empresas { get; set; } = new List<EmpresaSimpleDto>();
 }
 
 public class EmpleadoCreateDto
@@ -48,6 +41,4 @@ public class EmpleadoCreateDto
     // ID del jefe
     public string? jefe_id { get; set; }
 
-    // Lista de IDs de las empresas a las que pertenece el empleado
-    public List<string> EmpresaIds { get; set; } = new List<string>();
 }

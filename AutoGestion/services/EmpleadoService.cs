@@ -1,6 +1,5 @@
 ﻿using AutoGestion.interfaces;
 using AutoGestion.interfaces.IEmpleado;
-using AutoGestion.models.Empresa;
 using AutoGestion.Models;
 using AutoGestion.Utils;
 
@@ -41,12 +40,7 @@ namespace AutoGestion.services
                 jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
                 usuario = e.Usuario?.usuario ?? "",
-                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
-                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
-                {
-                    id = ee.Empresa.Id,
-                    nombre = ee.Empresa.nombre
-                }).ToList()
+
             });
 
             return empleadosDto;
@@ -75,12 +69,6 @@ namespace AutoGestion.services
                 jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
                 usuario = e.Usuario?.usuario ?? "",
-                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
-                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
-                {
-                    id = ee.Empresa.Id,
-                    nombre = ee.Empresa.nombre
-                }).ToList()
             });
 
             return empleadosDto;
@@ -110,52 +98,11 @@ namespace AutoGestion.services
                 jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
                 usuario = e.Usuario?.usuario ?? "",
-                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
-                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
-                {
-                    id = ee.Empresa.Id,
-                    nombre = ee.Empresa.nombre
-                }).ToList()
             };
 
             return empleadoDto;
         }
 
-        public async Task<IEnumerable<EmpleadoDTO?>> GetEmpleadosByEmpresaId()
-        {
-            var token = _AsinacionesService.GetTokenFromHeader();
-            var empresaId = _AsinacionesService.GetClaimValue(token!, "IdEmpresa");
-            var empleados = await _empleadoRepository.GetEmpleadoByEmpresaId(empresaId!);
-
-            if (empleados == null)
-            {
-                throw new KeyNotFoundException("Empleados no encontrado.");
-            }
-
-            var empleadosDto = empleados.Select(e => new EmpleadoDTO
-            {
-                id = e.id!,
-                nombre = e.nombre,
-                apellido = e.apellido,
-                correo = e.correo,
-                Vacaciones = e.Vacaciones,
-                FechaNacimiento = e.FechaNacimiento,
-                genero = e.genero,
-                puesto = e.Puesto != null ? e.Puesto.Nombre : "",
-                puesto_id = e.puesto_id,
-                jefe_id = e.jefe_id,
-                usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
-                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
-                activo = e.activo,
-                usuario = e.Usuario?.usuario ?? "",
-                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
-                {
-                    id = ee.Empresa.Id,
-                    nombre = ee.Empresa.nombre
-                }).ToList()
-            });
-            return empleadosDto;
-        }
 
         public async Task<EmpleadoDTO?> GetProfile()
         {
@@ -185,51 +132,10 @@ namespace AutoGestion.services
                 jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
                 usuario = e.Usuario?.usuario ?? "",
-                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
-                {
-                    id = ee.Empresa.Id,
-                    nombre = ee.Empresa.nombre
-                }).ToList()
+
             };
 
             return empleadoDto;
-        }
-
-        public async Task<IEnumerable<EmpleadoDTO?>> GetEmpleadosActivosByEmpresaId()
-        {
-            var token = _AsinacionesService.GetTokenFromHeader();
-            var empresaId = _AsinacionesService.GetClaimValue(token!, "IdEmpresa");
-            var empleados = await _empleadoRepository.GetEmpleadosActivosByEmpresaId(empresaId!);
-
-            if (empleados == null)
-            {
-                throw new KeyNotFoundException("Empleados no encontrado.");
-            }
-
-            var empleadosDto = empleados.Select(e => new EmpleadoDTO
-            {
-                id = e.id!,
-                nombre = e.nombre,
-                apellido = e.apellido,
-                correo = e.correo,
-                Vacaciones = e.Vacaciones,
-                FechaNacimiento = e.FechaNacimiento,
-                genero = e.genero,
-                puesto = e.Puesto != null ? e.Puesto.Nombre : "",
-                puesto_id = e.puesto_id,
-                jefe_id = e.jefe_id,
-                usuario_id = e.Usuario != null ? e.Usuario.usuario : "Sin Usuario asignado",
-                jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
-                activo = e.activo,
-                usuario = e.Usuario?.usuario ?? "",
-                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
-                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
-                {
-                    id = ee.Empresa.Id,
-                    nombre = ee.Empresa.nombre
-                }).ToList()
-            });
-            return empleadosDto;
         }
 
 
@@ -256,12 +162,6 @@ namespace AutoGestion.services
                 jefe = e.Jefe != null ? e.Jefe.nombre : "Sin jefe asignado",
                 activo = e.activo,
                 usuario = e.Usuario?.usuario ?? "",
-                // Mapeo de la relación muchos a muchos: EmpleadoEmpresas a EmpresaSimpleDto
-                Empresas = e.EmpleadoEmpresas.Select(ee => new EmpresaSimpleDto
-                {
-                    id = ee.Empresa.Id,
-                    nombre = ee.Empresa.nombre
-                }).ToList()
             });
             return empleadosDto;
         }
@@ -298,12 +198,6 @@ namespace AutoGestion.services
             // Guardar el empleado en la base de datos
             await _empleadoRepository.PostEmpleados(empleado);
 
-            // Asignar las empresas al empleado si existen los ids
-            if (empleadoCreateDto.EmpresaIds != null && empleadoCreateDto.EmpresaIds.Any())
-            {
-                // Asignar empresas usando el repositorio
-                await _empleadoRepository.AsignarEmpresaEmpleado(empleado.id, empleadoCreateDto.EmpresaIds);
-            }
 
             // Devolver el DTO con la información básica del empleado
             return new EmpleadoDTO
@@ -351,11 +245,6 @@ namespace AutoGestion.services
 
             await _empleadoRepository.PutEmpleados(id, empleadoFound);
 
-            // Actualizar empresas asignadas
-            if (empleadoDto.EmpresaIds != null && empleadoDto.EmpresaIds.Any())
-            {
-                await _empleadoRepository.AsignarEmpresaEmpleado(id, empleadoDto.EmpresaIds);
-            }
 
             // Obtener nuevamente con relaciones
             var empleadoUpdated = await _empleadoRepository.GetEmpleadoById(id);
@@ -375,13 +264,7 @@ namespace AutoGestion.services
                 jefe_id = empleadoUpdated.jefe_id,
                 jefe = empleadoUpdated.Jefe?.nombre ?? "Sin jefe asignado",
                 usuario_id = empleadoUpdated.Usuario?.usuario ?? "Sin Usuario asignado",
-                usuario = empleadoUpdated.Usuario?.usuario ?? "",
-                Empresas = empleadoUpdated.EmpleadoEmpresas
-                    .Select(ee => new EmpresaSimpleDto
-                    {
-                        id = ee.Empresa.Id,
-                        nombre = ee.Empresa.nombre
-                    }).ToList()
+                usuario = empleadoUpdated.Usuario?.usuario ?? ""
             };
         }
 

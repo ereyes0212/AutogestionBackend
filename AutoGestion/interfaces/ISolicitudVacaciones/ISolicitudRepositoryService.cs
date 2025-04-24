@@ -12,6 +12,7 @@ namespace AutoGestion.Interfaces.ISolicitudVacaciones
         Task<SolicitudVacacionDto> CrearSolicitudAsync(SolicitudVacacionCreateDto dto);
         Task<SolicitudVacacionDto> ProcesarAprobacionAsync(string solicitudId, int nivel, bool aprobado, string comentarios);
         Task<IEnumerable<AprobacionVacacionDto>> GetAprobacionesPorEmpleado();
+        Task<IEnumerable<AprobacionVacacionDto>> GetAprobacionesPorEmpleadoHistorico();
 
     }
 }

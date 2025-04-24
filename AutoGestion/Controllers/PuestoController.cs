@@ -1,6 +1,5 @@
 ﻿using AutoGestion.interfaces.IEmpleado;
 using AutoGestion.interfaces.IPuesto;
-using AutoGestion.models.Empresa;
 using AutoGestion.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,21 +34,7 @@ namespace AutoGestion.Controllers
             }
 
         }
-        [HttpGet("empresaId")]
-        public async Task<ActionResult<IEnumerable<PuestoDto>>> GetPuestosByEmpresaId()
-        {
-            try
-            {
-                var puestos = await _puestoService.GetPuestosByEmpresaId();
 
-                return Ok(puestos);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
-        }
 
         [HttpPost]
         public async Task<ActionResult<PuestoDto>> CreatePuestos(Puesto puesto)
@@ -112,19 +97,6 @@ namespace AutoGestion.Controllers
             }
 
         }
-        [HttpGet("activos/empresa")]
-        public async Task<ActionResult<IEnumerable<PuestoDto>>> GetPuestosActivosByEmpresaId()
-        {
-            try
-            {
-                var puestos = await _puestoService.GetPuestosActivosByEmpresaId();
-                return Ok(puestos);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
 
-        }
     }
 }

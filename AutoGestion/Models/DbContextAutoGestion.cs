@@ -14,16 +14,12 @@ namespace AutoGestion.Models
         public DbSet<Empleado> Empleados { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<RolePermiso> RolePermiso { get; set; }
-        public DbSet<Empresa> Empresa { get; set; }
         public DbSet<Puesto> Puesto { get; set; }
         public DbSet<ConfiguracionAprobacion> ConfiguracionAprobacion { get; set; }
         public DbSet<TipoSolicitud> TipoSolicitud { get; set; }
         public DbSet<SolicitudVacacion> SolicitudVacacion { get; set; }
         public DbSet<SolicitudVacacionAprobacion> SolicitudVacacionAprobacion { get; set; }
 
-
-        // Nueva entidad para la relación muchos a muchos entre Empleado y Empresa
-        public DbSet<EmpleadoEmpresa> EmpleadoEmpresa { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,18 +37,6 @@ namespace AutoGestion.Models
                       .HasForeignKey(rp => rp.PermisoId);
             });
 
-            modelBuilder.Entity<EmpleadoEmpresa>(entity =>
-            {
-                entity.HasKey(ee => new { ee.EmpleadoId, ee.EmpresaId });
-
-                entity.HasOne(ee => ee.Empleado)
-                      .WithMany(e => e.EmpleadoEmpresas)
-                      .HasForeignKey(ee => ee.EmpleadoId);
-
-                entity.HasOne(ee => ee.Empresa)
-                      .WithMany(e => e.EmpleadoEmpresas)
-                      .HasForeignKey(ee => ee.EmpresaId);
-            });
 
             base.OnModelCreating(modelBuilder);
         }

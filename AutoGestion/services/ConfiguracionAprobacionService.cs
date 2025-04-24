@@ -31,7 +31,6 @@ namespace AutoGestion.services
             var dtos = configs.Select(c => new ConfiguracionAprobacionDto
             {
                 Id = c.Id!,
-                Empresa = c.Empresa.nombre!,
                 Puesto = c.Puesto != null ? c.Puesto.Nombre : c.Descripcion,
                 Descripcion = c.Descripcion!,
                 Tipo = c.Tipo!,
@@ -53,7 +52,6 @@ namespace AutoGestion.services
             var dto = new ConfiguracionAprobacionDto
             {
                 Id = config.Id!,
-                Empresa = config.Empresa.nombre!,
                 Puesto = config.Puesto.Nombre,
                 Descripcion = config.Descripcion!,
                 Tipo = config.Tipo!,
@@ -64,28 +62,7 @@ namespace AutoGestion.services
             return dto;
         }
 
-        public async Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobacionesByEmpresaId(string id)
-        {
-        
-            var configs = await _configuracionRepository.GetAprobacionesByEmpresaId(id);
-            if (configs == null || !configs.Any())
-            {
-                throw new KeyNotFoundException("No se encontraron configuraciones para la empresa.");
-            }
 
-            var dtos = configs.Select(c => new ConfiguracionAprobacionDto
-            {
-                Id = c.Id!,
-                Empresa = c.Empresa.nombre!,
-                Puesto = c.Puesto != null ? c.Puesto.Nombre : c.Descripcion,
-                Descripcion = c.Descripcion!,
-                Tipo = c.Tipo!,
-                Nivel = c.nivel,
-                Activo = c.Activo
-            });
-
-            return dtos;
-        }
 
         public async Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobacionesActivas()
         {
@@ -98,31 +75,8 @@ namespace AutoGestion.services
             var dtos = configs.Select(c => new ConfiguracionAprobacionDto
             {
                 Id = c.Id!,
-                Empresa = c.Empresa.nombre!,
-                Puesto = c.Puesto != null ? c.Puesto.Nombre : c.Descripcion,
-                Descripcion = c.Descripcion!,
-                Tipo = c.Tipo!,
-                Nivel = c.nivel,
-                Activo = c.Activo
-            });
-
             return dtos;
         }
-
-        public async Task<IEnumerable<ConfiguracionAprobacionDto>> GetAprobacionesActivasByEmpresaId()
-        {
-            var token = _asignacionesService.GetTokenFromHeader();
-            var empresaId = _asignacionesService.GetClaimValue(token!, "IdEmpresa");
-            var configs = await _configuracionRepository.GetAprobacionesActivosByEmpresaId(empresaId);
-            if (configs == null || !configs.Any())
-            {
-                throw new KeyNotFoundException("No se encontraron configuraciones activas para la empresa.");
-            }
-
-            var dtos = configs.Select(c => new ConfiguracionAprobacionDto
-            {
-                Id = c.Id!,
-                Empresa = c.Empresa.nombre!,
                 Puesto = c.Puesto != null ? c.Puesto.Nombre : c.Descripcion,
                 Descripcion = c.Descripcion!,
                 Tipo = c.Tipo!,
@@ -136,22 +90,15 @@ namespace AutoGestion.services
         // Inserta en lote (por ejemplo, luego de un drag-and-drop desde el frontend)
         public async Task<IEnumerable<ConfiguracionAprobacionDto>> PostAprobaciones(IEnumerable<ConfiguracionAprobacion> configuraciones)
         {
-            // Verificar si el id de la empresa está presente en las configuraciones
-            var empresaId = configuraciones.FirstOrDefault()?.Empresa_id;
 
-            if (empresaId == null)
-            {
-                throw new ArgumentException("La empresa no puede ser nula.");
-            }
 
-            // Eliminar todas las configuraciones anteriores para esa empresa
-            await _configuracionRepository.DeleteAprobacionesByEmpresaId(empresaId);
+            await _configuracionRepository.DeleteAprobaciones();
+
 
             // Mapeo de entidad a ConfiguracionAprobacion
             foreach (var config in configuraciones)
             {
                 config.Id = _asignacionesService.GenerateNewId();
-                config.Empresa_id = empresaId ?? _asignacionesService.GetClaimValue(_asignacionesService.GetTokenFromHeader()!, "IdEmpresa");
                 config.Created_at = _asignacionesService.GetCurrentDateTime();
                 config.Activo = true;
                 config.Updated_at = _asignacionesService.GetCurrentDateTime();
@@ -166,7 +113,6 @@ namespace AutoGestion.services
             var dtos = savedConfigs.Select(c => new ConfiguracionAprobacionDto
             {
                 Id = c.Id!,
-                Empresa = c.Empresa_id!,
                 Puesto = c.Puesto != null ? c.Puesto.Nombre : c.Descripcion,
                 Descripcion = c.Descripcion!,
                 Tipo = c.Tipo!,
@@ -185,7 +131,6 @@ namespace AutoGestion.services
             var configsToUpdate = configuraciones.Select(dto => new ConfiguracionAprobacion
             {
                 Id = dto.Id,
-                Empresa_id = dto.Empresa,
                 puesto_id = dto.Puesto,
                 Descripcion = dto.Descripcion,
                 Tipo = dto.Tipo,
@@ -200,7 +145,6 @@ namespace AutoGestion.services
             var dtos = updatedConfigs.Select(c => new ConfiguracionAprobacionDto
             {
                 Id = c.Id!,
-                Empresa = c.Empresa_id!,
                 Puesto = c.Puesto != null ? c.Puesto.Nombre : c.Descripcion,
                 Descripcion = c.Descripcion!,
                 Tipo = c.Tipo!,
@@ -210,5 +154,7 @@ namespace AutoGestion.services
 
             return dtos;
         }
+
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using AutoGestion.models.Empresa;
+﻿
 using AutoGestion.Models;
 
     public interface ITipoSolicitudService

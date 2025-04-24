@@ -56,9 +56,25 @@ namespace AutoGestion.Repositories.SolicitudVacaciones
             return await _ctx.SolicitudVacacionAprobacion
                 .Include(a => a.SolicitudVacacion)
                     .ThenInclude(sv => sv.Empleado)
-                .Where(a => a.EmpleadoAprobadorId == empleadoId && a.Estado == "Pendiente")
+                .Include(a => a.SolicitudVacacion)
+                    .ThenInclude(sv => sv.Puesto)
+                .Where(a => a.EmpleadoAprobadorId == empleadoId
+                         && a.Estado == "Pendiente")
                 .ToListAsync();
         }
+        public async Task<IEnumerable<SolicitudVacacionAprobacion>> GetAprobacionesPorEmpleadoHistorico(string empleadoId)
+        {
+            return await _ctx.SolicitudVacacionAprobacion
+                .Include(a => a.SolicitudVacacion)
+                    .ThenInclude(sv => sv.Empleado)
+                .Include(a => a.SolicitudVacacion)
+                    .ThenInclude(sv => sv.Puesto)
+                .Where(a => a.EmpleadoAprobadorId == empleadoId
+                         && a.Estado != "Pendiente")
+                .ToListAsync();
+        }
+
+
 
 
     }

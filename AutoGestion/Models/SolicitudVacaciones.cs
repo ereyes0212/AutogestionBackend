@@ -66,7 +66,10 @@ namespace AutoGestion.Models
         public Empleado? EmpleadoAprobador { get; set; }
 
         [Required]
-        public int Nivel { get; set; }  // orden en el flujo
+        public int Nivel { get; set; } 
+
+        [Required]
+        public string Descripcion { get; set; }  
 
         [Required, StringLength(50)]
         public string Estado { get; set; }  // "Pendiente", "Aprobado", "Rechazado"

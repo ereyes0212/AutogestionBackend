@@ -77,6 +77,13 @@ namespace AutoGestion.Controllers
         {
             var aprobaciones = await _solicitudService.GetAprobacionesPorEmpleado();
             return Ok(aprobaciones);
+        }        
+
+        [HttpGet("aprobaciones/empleado/historico")]
+        public async Task<ActionResult<IEnumerable<AprobacionVacacionDto>>> GetAprobacionesPorEmpleadoHistorico()
+        {
+            var aprobaciones = await _solicitudService.GetAprobacionesPorEmpleadoHistorico();
+            return Ok(aprobaciones);
         }
 
     }

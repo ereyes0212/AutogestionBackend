@@ -1,7 +1,6 @@
 ﻿using AutoGestion.interfaces;
 using AutoGestion.interfaces.IEmpleado;
 using AutoGestion.interfaces.IPuesto;
-using AutoGestion.models.Empresa;
 using AutoGestion.Models;
 using AutoGestion.Utils;
 
@@ -30,9 +29,7 @@ namespace AutoGestion.services
             {
                 Id = p.Id!,
                 Nombre = p.Nombre,
-                Activo = p.Activo,                
-                empresa = p.Empresa.nombre,
-                empresa_id = p.Empresa_id,
+                Activo = p.Activo,            
                 Descripcion = p.Descripcion
             });
 
@@ -52,58 +49,13 @@ namespace AutoGestion.services
                 Id = puesto.Id!,
                 Nombre = puesto.Nombre,
                 Descripcion = puesto.Descripcion,
-                Activo = puesto.Activo,
-                empresa_id = puesto.Empresa_id,
-                empresa = puesto.Empresa.Id,
+                Activo = puesto.Activo
             };
 
             return PuestoDto;
         }
 
-        public async Task<IEnumerable<PuestoDto?>> GetPuestosByEmpresaId()
-        {
-            var token = _AsinacionesService.GetTokenFromHeader();
-            var empresaId = _AsinacionesService.GetClaimValue(token!, "IdEmpresa");
-            var puestos = await _puestoRepository.GetPuestosByEmpresaId(empresaId!);
 
-            if (puestos == null)
-            {
-                throw new KeyNotFoundException("Puestos no encontrado.");
-            }
-
-            var puestosDto = puestos.Select(p => new PuestoDto
-            {
-                Id = p.Id!,
-                Nombre = p.Nombre,
-                empresa = p.Empresa.nombre,
-                empresa_id = p.Empresa_id,
-                Activo = p.Activo,
-                Descripcion = p.Descripcion,
-            });
-            return puestosDto;
-        }
-        public async Task<IEnumerable<PuestoDto?>> GetPuestosActivosByEmpresaId()
-        {
-            var token = _AsinacionesService.GetTokenFromHeader();
-            var empresaId = _AsinacionesService.GetClaimValue(token!, "IdEmpresa");
-            var puestos = await _puestoRepository.GetPuestosActivosByEmpresaId(empresaId!);
-
-            if (puestos == null)
-            {
-                throw new KeyNotFoundException("Puesto no encontrado.");
-            }
-
-            var PuestosDto = puestos.Select(p => new PuestoDto
-            {
-                Id = p.Id!,
-                Nombre = p.Nombre,
-                empresa = p.Empresa.nombre,
-                Activo = p.Activo,
-                empresa_id = p.Empresa_id,
-                Descripcion = p.Descripcion,
-            });
-            return PuestosDto;
-        }
 
 
         public async Task<IEnumerable<PuestoDto>> GetPuestosActivos()
@@ -117,7 +69,6 @@ namespace AutoGestion.services
             {
                 Id = e.Id!,
                 Nombre = e.Nombre,
-                empresa = e.Empresa.nombre,
                 Activo = e.Activo,
                 Descripcion = e.Descripcion
 
@@ -131,10 +82,6 @@ namespace AutoGestion.services
             puesto.Id = _AsinacionesService.GenerateNewId();
             puesto.Created_at = _AsinacionesService.GetCurrentDateTime();
             puesto.Updated_at = _AsinacionesService.GetCurrentDateTime();
-            if (string.IsNullOrEmpty(puesto.Empresa_id))
-            {
-                puesto.Empresa_id = _AsinacionesService.GetClaimValue(token!, "IdEmpresa") ?? "Sistema";
-            }
             puesto.Adicionado_por = _AsinacionesService.GetClaimValue(token!, "User") ?? "Sistema";
             puesto.Modificado_por = _AsinacionesService.GetClaimValue(token!, "User") ?? "Sistema";
             await _puestoRepository.PostPuestos(puesto);
@@ -159,7 +106,6 @@ namespace AutoGestion.services
             var token = _AsinacionesService.GetTokenFromHeader();
             puestoFound.ActualizarPropiedades(puesto);
             puestoFound.Activo = puesto.Activo;
-            puesto.Empresa_id = _AsinacionesService.GetClaimValue(token!, "IdEmpresa") ?? "Sistema";
             puestoFound.Updated_at = _AsinacionesService.GetCurrentDateTime();
             puestoFound.Modificado_por = _AsinacionesService.GetClaimValue(token!, "User") ?? "Sistema";
 

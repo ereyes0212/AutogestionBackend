@@ -45,22 +45,6 @@ namespace AutoGestion.services
                 if (propertyValue == null)
                     continue;
 
-                // Si la propiedad se llama "Empresas" y es una colección de objetos, iteramos para agregar un claim por cada elemento.
-                if (property.Name == "Empresas" && propertyValue is IEnumerable<object> empresas)
-                {
-                    foreach (var empresa in empresas)
-                    {
-                        // Obtener las propiedades "id" y "nombre" del objeto empresa
-                        var idProp = empresa.GetType().GetProperty("id")?.GetValue(empresa)?.ToString();
-                        var nombreProp = empresa.GetType().GetProperty("nombre")?.GetValue(empresa)?.ToString();
-
-                        if (!string.IsNullOrEmpty(idProp) && !string.IsNullOrEmpty(nombreProp))
-                        {
-                            // Agregar un claim con el valor formateado, por ejemplo "id|nombre"
-                            claims.Add(new Claim("Empresas", $"{idProp}|{nombreProp}"));
-                        }
-                    }
-                }
                 // Si es una lista de strings, los agregamos individualmente.
                 else if (propertyValue is IEnumerable<string> stringList)
                 {

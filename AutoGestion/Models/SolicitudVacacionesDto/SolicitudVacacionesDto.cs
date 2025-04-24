@@ -11,7 +11,6 @@ namespace AutoGestion.Models.SolicitudVacacionesDto
 
         // Motivo / descripción
         public string Descripcion { get; set; }
-        public string EmpresaId { get; set; }
     }
     public class SolicitudVacacionDto
     {
@@ -36,6 +35,8 @@ namespace AutoGestion.Models.SolicitudVacacionesDto
     {
         // Datos de la aprobación
         public string Id { get; set; }
+        public string IdSolicitud { get; set; }
+
         public int Nivel { get; set; }
         public bool? Aprobado { get; set; } // true = aprobado, false = rechazado, null = pendiente
         public string Comentario { get; set; }
@@ -45,6 +46,7 @@ namespace AutoGestion.Models.SolicitudVacacionesDto
         public string EmpleadoId { get; set; }
         public string NombreEmpleado { get; set; }
         public string PuestoId { get; set; }
+        public string Puesto { get; set; }
 
         // Datos de la solicitud de vacaciones
         public DateTime? FechaSolicitud { get; set; }

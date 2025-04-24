@@ -46,19 +46,7 @@ namespace AutoGestion.Controllers
             }
         }
 
-        [HttpGet("empresa/{id}")]
-        public async Task<ActionResult<IEnumerable<ConfiguracionAprobacionDto>>> GetAprobacionesByEmpresaId(string id)
-        {
-            try
-            {
-                var aprobaciones = await _configuracionService.GetAprobacionesByEmpresaId(id);
-                return Ok(aprobaciones);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+
 
         [HttpGet("activos")]
         public async Task<ActionResult<IEnumerable<ConfiguracionAprobacionDto>>> GetAprobacionesActivas()
@@ -74,19 +62,6 @@ namespace AutoGestion.Controllers
             }
         }
 
-        [HttpGet("activos/empresa/")]
-        public async Task<ActionResult<IEnumerable<ConfiguracionAprobacionDto>>> GetAprobacionesActivasByEmpresaId()
-        {
-            try
-            {
-                var aprobaciones = await _configuracionService.GetAprobacionesActivasByEmpresaId();
-                return Ok(aprobaciones);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
 
         [HttpPost]
         public async Task<ActionResult<IEnumerable<ConfiguracionAprobacionDto>>> PostAprobaciones([FromBody] IEnumerable<ConfiguracionAprobacion> configuraciones)

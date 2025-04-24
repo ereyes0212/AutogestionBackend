@@ -25,45 +25,16 @@ namespace CarWashBackend.Data
                 _context.Roles.RemoveRange(_context.Roles);
                 _context.Usuarios.RemoveRange(_context.Usuarios);
                 _context.Empleados.RemoveRange(_context.Empleados);
-                _context.Empresa.RemoveRange(_context.Empresa);
                 _context.Puesto.RemoveRange(_context.Puesto);
-                _context.EmpleadoEmpresa.RemoveRange(_context.EmpleadoEmpresa);
                 _context.SaveChanges();
             }
 
-            // Verificar si ya existe la empresa "Diario Tiempo"
-            var empresaExistente = _context.Empresa.FirstOrDefault(e => e.nombre == "Diario Tiempo");
-            if (empresaExistente != null)
-            {
-                // Si la empresa ya existe, no se ejecuta el resto del seeding
-                return;
-            }
 
-            // Crear Empresas
-            var empresa1 = new Empresa
-            {
-                Id = Guid.NewGuid().ToString(),
-                nombre = "Diario Tiempo",
-                activo = true,
-                adicionado_por = "Sistema",
-                modificado_por = "Sistema",
-                created_at = DateTime.UtcNow,
-                updated_at = DateTime.UtcNow
-            };
-            _context.Empresa.Add(empresa1);
 
-            var empresa2 = new Empresa
-            {
-                Id = Guid.NewGuid().ToString(),
-                nombre = "Tiempo Digital",
-                activo = true,
-                adicionado_por = "Sistema",
-                modificado_por = "Sistema",
-                created_at = DateTime.UtcNow,
-                updated_at = DateTime.UtcNow
-            };
-            _context.Empresa.Add(empresa2);
-            _context.SaveChanges();
+
+
+
+
 
             // Sembrar Permisos (solo si no existen)
             if (!_context.Permisos.Any())
@@ -75,10 +46,6 @@ namespace CarWashBackend.Data
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_empleados", Descripcion = "Permiso para crear los empleados", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_empleado", Descripcion = "Permiso para editar los empleados", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
 
-                    //Empresas
-                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_empresas", Descripcion = "Permiso para ver las empresas", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
-                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_empresas", Descripcion = "Permiso para crear las empresas", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
-                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_empresas", Descripcion = "Permiso para editar las empresas", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
 
                     //Permisos
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_permisos", Descripcion = "Permiso para ver los permisos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
@@ -146,7 +113,6 @@ namespace CarWashBackend.Data
                     Nombre = "Gerente Recursos Humanos",
                     Activo = true,
                     Descripcion = "Gerente de recursos humanos de diario tiempo",
-                    Empresa_id = empresa1.Id,
                     Adicionado_por = "Sistema",
                     Modificado_por = "Sistema",
                     Created_at = DateTime.UtcNow,
@@ -178,19 +144,6 @@ namespace CarWashBackend.Data
                 };
 
                 _context.Empleados.Add(empleado);
-                _context.SaveChanges();
-
-                // Asignar las dos empresas al empleado
-                _context.EmpleadoEmpresa.Add(new EmpleadoEmpresa
-                {
-                    EmpleadoId = empleado.id,
-                    EmpresaId = empresa1.Id
-                });
-                _context.EmpleadoEmpresa.Add(new EmpleadoEmpresa
-                {
-                    EmpleadoId = empleado.id,
-                    EmpresaId = empresa2.Id
-                });
                 _context.SaveChanges();
             }
 

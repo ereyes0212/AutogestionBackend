@@ -17,25 +17,19 @@ namespace AutoGestion.Repositories
         }
         public async Task<IEnumerable<Puesto>> GetPuestos()
         {
-            return await _dbContextAutoGestion.Puesto.Include("Empresa").ToListAsync();
+            return await _dbContextAutoGestion.Puesto.ToListAsync();
         }
         public async Task<Puesto?> GetPuestosById(string id)
         {
-            return await _dbContextAutoGestion.Puesto.Where(e => e.Id == id).Include("Empresa").FirstOrDefaultAsync() ?? null;
+            return await _dbContextAutoGestion.Puesto.Where(e => e.Id == id).FirstOrDefaultAsync() ?? null;
         }
-        public async Task<IEnumerable<Puesto?>> GetPuestosByEmpresaId(string id)
-        {
-            return await _dbContextAutoGestion.Puesto.Where(e => e.Empresa_id == id).Include("Empresa").ToListAsync() ?? null;
-        }
+
 
         public async Task<IEnumerable<Puesto>> GetPuestosActivos()
         {
-            return await _dbContextAutoGestion.Puesto.Where(e => e.Activo == true).Include("Empresa").ToListAsync();
+            return await _dbContextAutoGestion.Puesto.Where(e => e.Activo == true).ToListAsync();
         }
-        public async Task<IEnumerable<Puesto>> GetPuestosActivosByEmpresaId(string id)
-        {
-            return await _dbContextAutoGestion.Puesto.Where(e => e.Activo == true && e.Empresa_id == id).Include("Empresa").ToListAsync();
-        }
+
 
         public async Task<Puesto> PostPuestos(Puesto puesto)
         {

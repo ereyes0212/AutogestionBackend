@@ -9,6 +9,7 @@ namespace AutoGestion.Interfaces.ISolicitudVacaciones
         Task<SolicitudVacacion?> GetSolicitudByIdAsync(string id);
         Task<IEnumerable<SolicitudVacacion>> GetSolicitudesPorEmpleadoAsync(string empleadoId);
         Task<IEnumerable<SolicitudVacacionAprobacion>> GetAprobacionesPorEmpleado(string empleadoId);
+        Task<IEnumerable<SolicitudVacacionAprobacion>> GetAprobacionesPorEmpleadoHistorico(string empleadoId);
 
         Task<SolicitudVacacion> AddSolicitudAsync(SolicitudVacacion solicitud);
         Task<SolicitudVacacion> UpdateSolicitudAsync(SolicitudVacacion solicitud);

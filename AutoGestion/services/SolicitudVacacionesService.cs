@@ -1,9 +1,9 @@
 ﻿
-using AutoGestion.Interfaces.ISolicitudVacaciones;         
+using AutoGestion.interfaces;
+using AutoGestion.interfaces.IConfiguracion;
+using AutoGestion.Interfaces.ISolicitudVacaciones;
 using AutoGestion.Models;
 using AutoGestion.Models.SolicitudVacacionesDto;
-using AutoGestion.interfaces.IConfiguracion;
-using AutoGestion.interfaces;
 
 namespace AutoGestion.Services.SolicitudVacaciones
 {
@@ -53,8 +53,7 @@ namespace AutoGestion.Services.SolicitudVacaciones
             var IdEmpleado = _utils.GetClaimValue(token!, "IdEmpleado");
             var PuestoId = _utils.GetClaimValue(token!, "PuestoId");
 
-            // Obtener las configuraciones de aprobación activas para la empresa
-            var cfgs = await _cfgRepo.GetAprobacionesActivosByEmpresaId(dto.EmpresaId);
+            var cfgs = await _cfgRepo.GetAprobacionesActivos();
 
             // Validación de fechas
             if (dto.FechaFin < dto.FechaInicio)
@@ -82,6 +81,7 @@ namespace AutoGestion.Services.SolicitudVacaciones
                 var aprobacion = new SolicitudVacacionAprobacion
                 {
                     Id = _utils.GenerateNewId(),
+                    Descripcion = cfg.Descripcion,
                     ConfiguracionAprobacionId = cfg.Id!,
                     Nivel = cfg.nivel,
                     Estado = "Pendiente",
@@ -172,6 +172,7 @@ namespace AutoGestion.Services.SolicitudVacaciones
                                   {
                                       Id = a.Id,
                                       Nivel = a.Nivel,
+                                      Descripcion = a.Descripcion,
                                       Aprobado = a.Estado == "Aprobado"
                                                           ? (bool?)true
                                                           : a.Estado == "Rechazado"
@@ -183,42 +184,79 @@ namespace AutoGestion.Services.SolicitudVacaciones
                                   .ToList()
         };
 
+        // AutoGestion.Services.SolicitudVacaciones/SolicitudVacacionesService.cs
         public async Task<IEnumerable<AprobacionVacacionDto>> GetAprobacionesPorEmpleado()
         {
+            // 1) Extraer el empleadoId del token
             var token = _utils.GetTokenFromHeader();
-            var empleadoId = _utils.GetClaimValue(token!, "IdEmpleado");
+            var empleadoId = _utils.GetClaimValue(token!, "IdEmpleado")
+                            ?? throw new UnauthorizedAccessException("No se pudo identificar el empleado.");
 
-            if (empleadoId == null)
-                throw new UnauthorizedAccessException("No se pudo identificar el empleado.");
-
+            // 2) Llamar al repositorio (que ya filtra por EmpleadoAprobadorId y Estado = "Pendiente")
             var aprobaciones = await _repo.GetAprobacionesPorEmpleado(empleadoId);
 
+            // 3) Mapear a DTO
             return aprobaciones.Select(a => new AprobacionVacacionDto
             {
                 Id = a.Id,
+                IdSolicitud = a.SolicitudVacacionId,
                 Nivel = a.Nivel,
-                Aprobado = a.Estado == "Aprobado"
-                            ? (bool?)true
-                            : a.Estado == "Rechazado"
-                                ? (bool?)false
-                                : null,
+                Aprobado = null,  // siempre null porque son "Pendiente"
                 Comentario = a.Comentarios,
                 FechaAprobacion = a.FechaDecision,
 
-                EmpleadoId = a.SolicitudVacacion?.EmpleadoId,
-                NombreEmpleado = a.SolicitudVacacion?.Empleado != null
-                                    ? $"{a.SolicitudVacacion.Empleado.nombre} {a.SolicitudVacacion.Empleado.apellido}"
-                                    : "",
-                PuestoId = a.SolicitudVacacion?.PuestoId,
-                FechaSolicitud = a.SolicitudVacacion?.FechaSolicitud,
-                FechaInicio = a.SolicitudVacacion?.FechaInicio,
-                FechaFin = a.SolicitudVacacion?.FechaFin,
-                DiasSolicitados = a.SolicitudVacacion != null
-                                    ? (a.SolicitudVacacion.FechaFin - a.SolicitudVacacion.FechaInicio).Days + 1
-                                    : 0,
-                Descripcion = a.SolicitudVacacion?.Descripcion,
-            }).ToList();
+                // Datos de la solicitud asociada para mostrar contexto en el front
+                EmpleadoId = a.SolicitudVacacion.EmpleadoId,
+                NombreEmpleado = $"{a.SolicitudVacacion.Empleado.nombre} {a.SolicitudVacacion.Empleado.apellido}",
+                PuestoId = a.SolicitudVacacion.PuestoId,
+                Puesto = a.SolicitudVacacion.Puesto.Nombre,
+                FechaSolicitud = a.SolicitudVacacion.FechaSolicitud,
+                FechaInicio = a.SolicitudVacacion.FechaInicio,
+                FechaFin = a.SolicitudVacacion.FechaFin,
+                DiasSolicitados = a.SolicitudVacacion.DiasSolicitados,
+                Descripcion = a.SolicitudVacacion.Descripcion
+            })
+            .ToList();
         }
+        // AutoGestion.Services.SolicitudVacaciones/SolicitudVacacionesService.cs
+        public async Task<IEnumerable<AprobacionVacacionDto>> GetAprobacionesPorEmpleadoHistorico()
+        {
+            // 1) Extraer el empleadoId del token
+            var token = _utils.GetTokenFromHeader();
+            var empleadoId = _utils.GetClaimValue(token!, "IdEmpleado")
+                            ?? throw new UnauthorizedAccessException("No se pudo identificar el empleado.");
+
+            // 2) Llamar al repositorio (que ya filtra por EmpleadoAprobadorId y Estado = "Pendiente")
+            var aprobaciones = await _repo.GetAprobacionesPorEmpleadoHistorico(empleadoId);
+
+            // 3) Mapear a DTO
+            return aprobaciones.Select(a => new AprobacionVacacionDto
+            {
+                Id = a.Id,
+                IdSolicitud = a.SolicitudVacacionId,
+                Nivel = a.Nivel,
+                Aprobado = a.Estado == "Aprobado"
+                ? (bool?)true
+    : a.Estado == "Rechazado"
+        ? (bool?)false
+        : null,
+                Comentario = a.Comentarios,
+                FechaAprobacion = a.FechaDecision,
+
+                // Datos de la solicitud asociada para mostrar contexto en el front
+                EmpleadoId = a.SolicitudVacacion.EmpleadoId,
+                NombreEmpleado = $"{a.SolicitudVacacion.Empleado.nombre} {a.SolicitudVacacion.Empleado.apellido}",
+                PuestoId = a.SolicitudVacacion.PuestoId,
+                Puesto = a.SolicitudVacacion.Puesto.Nombre,
+                FechaSolicitud = a.SolicitudVacacion.FechaSolicitud,
+                FechaInicio = a.SolicitudVacacion.FechaInicio,
+                FechaFin = a.SolicitudVacacion.FechaFin,
+                DiasSolicitados = a.SolicitudVacacion.DiasSolicitados,
+                Descripcion = a.SolicitudVacacion.Descripcion
+            })
+            .ToList();
+        }
+
 
 
     }

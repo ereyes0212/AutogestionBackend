@@ -9,9 +9,6 @@ namespace AutoGestion.Models
         [StringLength(36)]
         public string? Id { get; set; }
 
-        [StringLength(36)]
-        public string? Empresa_id { get; set; }
-
         [Required]
         [StringLength(100)]
         public string Nombre { get; set; }
@@ -29,7 +26,5 @@ namespace AutoGestion.Models
         public string? Adicionado_por { get; set; }
         public string? Modificado_por { get; set; }
 
-        [ForeignKey("Empresa_id")]
-        public Empresa? Empresa { get; set; }
     }
 }

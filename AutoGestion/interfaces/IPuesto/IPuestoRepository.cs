@@ -6,9 +6,7 @@ namespace AutoGestion.interfaces.IPuesto
     {
         Task<IEnumerable<Puesto>> GetPuestos();
         Task<Puesto> GetPuestosById(string id);
-        Task<IEnumerable<Puesto>> GetPuestosByEmpresaId(string id);
         Task<IEnumerable<Puesto>> GetPuestosActivos();
-        Task<IEnumerable<Puesto>> GetPuestosActivosByEmpresaId(string id);
         Task<Puesto> PostPuestos(Puesto Puesto);
         Task<Puesto> PutPuestos(string id, Puesto Puesto);
     }

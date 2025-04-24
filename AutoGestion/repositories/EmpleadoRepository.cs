@@ -12,15 +12,12 @@ namespace AutoGestion.Repositories
             _dbContextAutoGestion = dbContextAutoGestion;
         }
 
-        // Trae todos los empleados, incluyendo Usuario, Puesto y la colección de EmpleadoEmpresas -> Empresa.
         public async Task<IEnumerable<Empleado>> GetEmpleados()
         {
             return await _dbContextAutoGestion.Empleados
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
                 .Include(e => e.Jefe)
-                .Include(e => e.EmpleadoEmpresas)
-                    .ThenInclude(ee => ee.Empresa)
                 .ToListAsync();
         }
 
@@ -32,8 +29,6 @@ namespace AutoGestion.Repositories
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
                 .Include(e => e.Jefe)
-                .Include(e => e.EmpleadoEmpresas)
-                    .ThenInclude(ee => ee.Empresa)
                 .ToListAsync();
         }
         public async Task<Empleado> GetEmpleadoByPuesto(string id)
@@ -42,13 +37,10 @@ namespace AutoGestion.Repositories
                 .Where(e => e.puesto_id == id)
                 .Include(e => e.Puesto)
                 .Include(e => e.Jefe)
-                .Include(e => e.EmpleadoEmpresas)
-                    .ThenInclude(ee => ee.Empresa)
                 .FirstOrDefaultAsync();
         }
 
 
-        // Trae un empleado por Id, incluyendo Usuario, Puesto y las empresas asociadas
         public async Task<Empleado?> GetEmpleadoById(string id)
         {
             return await _dbContextAutoGestion.Empleados
@@ -56,23 +48,9 @@ namespace AutoGestion.Repositories
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
                 .Include(e => e.Jefe)
-                .Include(e => e.EmpleadoEmpresas)
-                    .ThenInclude(ee => ee.Empresa)
                 .FirstOrDefaultAsync();
         }
 
-        // Trae empleados asociados a una empresa específica
-        public async Task<IEnumerable<Empleado>> GetEmpleadoByEmpresaId(string id)
-        {
-            return await _dbContextAutoGestion.Empleados
-                .Where(e => e.EmpleadoEmpresas.Any(ee => ee.Empresa.Id == id))
-                .Include(e => e.Usuario)
-                .Include(e => e.Puesto)
-                .Include(e => e.Jefe)
-                .Include(e => e.EmpleadoEmpresas)
-                    .ThenInclude(ee => ee.Empresa)
-                .ToListAsync();
-        }
 
         public async Task<Empleado?> GetProfile(string idEmpleado)
         {
@@ -81,8 +59,6 @@ namespace AutoGestion.Repositories
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
                 .Include(e => e.Jefe)
-                .Include(e => e.EmpleadoEmpresas)
-                    .ThenInclude(ee => ee.Empresa)
                 .FirstOrDefaultAsync();
         }
         // Trae empleados activos
@@ -93,23 +69,9 @@ namespace AutoGestion.Repositories
                 .Include(e => e.Usuario)
                 .Include(e => e.Puesto)
                 .Include(e => e.Jefe)
-                .Include(e => e.EmpleadoEmpresas)
-                    .ThenInclude(ee => ee.Empresa)
                 .ToListAsync();
         }
 
-        // Trae empleados activos asociados a una empresa específica
-        public async Task<IEnumerable<Empleado>> GetEmpleadosActivosByEmpresaId(string id)
-        {
-            return await _dbContextAutoGestion.Empleados
-                .Where(e => e.activo && e.EmpleadoEmpresas.Any(ee => ee.Empresa.Id == id))
-                .Include(e => e.Usuario)
-                .Include(e => e.Puesto)
-                .Include(e => e.Jefe)
-                .Include(e => e.EmpleadoEmpresas)
-                    .ThenInclude(ee => ee.Empresa)
-                .ToListAsync();
-        }
 
         // Crea un nuevo empleado
         public async Task<Empleado> PostEmpleados(Empleado empleado)
@@ -127,32 +89,6 @@ namespace AutoGestion.Repositories
             return empleado;
         }
 
-        // Asigna empresas a un empleado
-        public async Task AsignarEmpresaEmpleado(string empleadoId, List<string> empresaIds)
-        {
-            // Obtener el empleado con sus relaciones
-            var empleado = await _dbContextAutoGestion.Empleados
-                .Include(e => e.EmpleadoEmpresas)
-                .FirstOrDefaultAsync(e => e.id == empleadoId);
-
-            if (empleado == null)
-            {
-                throw new ArgumentException("Empleado no encontrado.");
-            }
-
-            // Eliminar relaciones existentes
-            _dbContextAutoGestion.EmpleadoEmpresa.RemoveRange(empleado.EmpleadoEmpresas);
-
-            // Crear nuevas relaciones
-            var nuevasRelaciones = empresaIds.Select(empresaId => new EmpleadoEmpresa
-            {
-                EmpleadoId = empleadoId,
-                EmpresaId = empresaId
-            });
-
-            await _dbContextAutoGestion.EmpleadoEmpresa.AddRangeAsync(nuevasRelaciones);
-            await _dbContextAutoGestion.SaveChangesAsync();
-        }
 
     }
 }

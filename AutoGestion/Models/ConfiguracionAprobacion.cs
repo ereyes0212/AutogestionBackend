@@ -9,9 +9,6 @@ public class ConfiguracionAprobacion
     public string? Id { get; set; }
 
     [StringLength(36)]
-    public string? Empresa_id { get; set; }
-
-    [StringLength(36)]
     public string? puesto_id { get; set; }
 
     [Required]
@@ -36,9 +33,6 @@ public class ConfiguracionAprobacion
 
     [StringLength(100)]
     public string? Modificado_por { get; set; }
-
-    [ForeignKey("Empresa_id")]
-    public Empresa? Empresa { get; set; }
 
     [ForeignKey("puesto_id")]
     public Puesto? Puesto { get; set; }
