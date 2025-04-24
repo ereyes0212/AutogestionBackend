@@ -75,8 +75,6 @@ namespace AutoGestion.services
             var dtos = configs.Select(c => new ConfiguracionAprobacionDto
             {
                 Id = c.Id!,
-            return dtos;
-        }
                 Puesto = c.Puesto != null ? c.Puesto.Nombre : c.Descripcion,
                 Descripcion = c.Descripcion!,
                 Tipo = c.Tipo!,
