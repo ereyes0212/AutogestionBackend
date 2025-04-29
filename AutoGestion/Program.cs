@@ -113,7 +113,7 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
         Console.WriteLine("Migraciones aplicadas correctamente.");
 
-        var seeder = new Seeder(context, true);
+        var seeder = new Seeder(context, false);
         seeder.Seed();
         Console.WriteLine("Seeding completo.");
     }
