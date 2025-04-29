@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoGestion.Migrations
 {
     [DbContext(typeof(DbContextAutoGestion))]
-    [Migration("20250423142806_InitDataBase")]
-    partial class InitDataBase
+    [Migration("20250429214215_InitDB")]
+    partial class InitDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,6 +126,10 @@ namespace AutoGestion.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("EmpleadoAprobadorId")
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
@@ -158,6 +162,42 @@ namespace AutoGestion.Migrations
                     b.HasIndex("SolicitudVacacionId");
 
                     b.ToTable("SolicitudVacacionAprobacion");
+                });
+
+            modelBuilder.Entity("AutoGestion.Models.TipoDeduccion", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<ulong>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Adicionado_por")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("Created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Modificado_por")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime?>("Updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TipoDeducciones");
                 });
 
             modelBuilder.Entity("AutoGestion.Models.Usuario", b =>

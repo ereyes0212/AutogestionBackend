@@ -1,11 +1,11 @@
 meta {
-  name: PostPuesto
+  name: PostTipoDeduccion
   type: http
   seq: 3
 }
 
 post {
-  url: {{url}}/api/Puesto
+  url: {{url}}/api/TipoDeduccion
   body: json
   auth: bearer
 }
@@ -16,7 +16,7 @@ auth:bearer {
 
 body:json {
   {
-    "Nombre": "Programador web",
-    "Descripcion": "Puesto programador web",
+    "Nombre": "RAP",
+    "Descripcion": "Impuesto del RAP"
   }
 }

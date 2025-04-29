@@ -1,0 +1,23 @@
+meta {
+  name: PutTipoDeduccion
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{url}}/api/TipoDeduccion/59c3fe65-c8aa-42bb-96af-6e081f064e9f
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "Nombre": "RAP",
+    "Descripcion": "Tipo de deduccion RAP",
+    "activo":true
+  }
+}

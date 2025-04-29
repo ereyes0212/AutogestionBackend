@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AutoGestion.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDataBase : Migration
+    public partial class InitDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -79,6 +79,30 @@ namespace AutoGestion.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "TipoDeducciones",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Nombre = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Descripcion = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Activo = table.Column<ulong>(type: "bit", nullable: false),
+                    Created_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Adicionado_por = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Modificado_por = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoDeducciones", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -300,6 +324,8 @@ namespace AutoGestion.Migrations
                     EmpleadoAprobadorId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Nivel = table.Column<int>(type: "int", nullable: false),
+                    Descripcion = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Estado = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
@@ -396,6 +422,9 @@ namespace AutoGestion.Migrations
 
             migrationBuilder.DropTable(
                 name: "SolicitudVacacionAprobacion");
+
+            migrationBuilder.DropTable(
+                name: "TipoDeducciones");
 
             migrationBuilder.DropTable(
                 name: "TipoSolicitud");

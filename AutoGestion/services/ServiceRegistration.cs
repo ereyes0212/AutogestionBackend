@@ -12,6 +12,7 @@ using AutoGestion.Services.SolicitudVacaciones;
 using AutoGestion.Repositories.SolicitudVacaciones;
 using AutoGestion.Interfaces.ISolicitudVacaciones;
 using AutoGestion.interfaces.IEmailService;
+using AutoGestion.interfaces.iTipoDeduccion;
 
 public static class ServiceRegistration
 {
@@ -29,7 +30,6 @@ public static class ServiceRegistration
         //Login
         services.AddScoped<ILoginRepository, LoginRepository>();
         services.AddScoped<ILoginService, LoginService>();  
-
         
         //Puesto
         services.AddScoped<IPuestoRepository, PuestoRepository>();
@@ -47,8 +47,9 @@ public static class ServiceRegistration
         services.AddScoped<ISolicitudVacacionesRepository, SolicitudVacacionesRepository>();
         services.AddScoped<ISolicitudVacacionesService, SolicitudVacacionesService>();   
         
-        //email
-        //services.AddScoped<IEmailService, SmtpEmailService>();   
+        //SolicitudVacaciones
+        services.AddScoped<ITipoDeduccionRepository, TipoDeduccionRepository>();
+        services.AddScoped<ITipoDeduccionService, TipoDeduccionService>();   
 
         //Asignaciones
         services.AddScoped<IAsignaciones, AsingacionesService>(); 

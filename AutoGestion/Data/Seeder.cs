@@ -60,6 +60,12 @@ namespace CarWashBackend.Data
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_usuario", Descripcion = "Permiso para crear usuarios", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_usuario", Descripcion = "Permiso para editar usuarios", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
 
+
+                    //Tipo Deducciones
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_tipodeducciones", Descripcion = "Permiso para ver tipo deducciones", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_tipodeducciones", Descripcion = "Permiso para crear tipo deducciones", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_tipodeducciones", Descripcion = "Permiso para editar tipo deducciones", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+
                     //Puestos
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_puestos", Descripcion = "Permiso para ver puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_puestos", Descripcion = "Permiso para crear puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },

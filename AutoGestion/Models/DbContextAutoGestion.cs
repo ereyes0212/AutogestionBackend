@@ -19,6 +19,7 @@ namespace AutoGestion.Models
         public DbSet<TipoSolicitud> TipoSolicitud { get; set; }
         public DbSet<SolicitudVacacion> SolicitudVacacion { get; set; }
         public DbSet<SolicitudVacacionAprobacion> SolicitudVacacionAprobacion { get; set; }
+        public DbSet<TipoDeduccion> TipoDeducciones { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
