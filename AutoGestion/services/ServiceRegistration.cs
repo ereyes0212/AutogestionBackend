@@ -11,6 +11,7 @@ using AutoGestion.interfaces.IConfiguracion;
 using AutoGestion.Services.SolicitudVacaciones;
 using AutoGestion.Repositories.SolicitudVacaciones;
 using AutoGestion.Interfaces.ISolicitudVacaciones;
+using AutoGestion.interfaces.IEmailService;
 
 public static class ServiceRegistration
 {
@@ -45,6 +46,9 @@ public static class ServiceRegistration
         //SolicitudVacaciones
         services.AddScoped<ISolicitudVacacionesRepository, SolicitudVacacionesRepository>();
         services.AddScoped<ISolicitudVacacionesService, SolicitudVacacionesService>();   
+        
+        //email
+        //services.AddScoped<IEmailService, SmtpEmailService>();   
 
         //Asignaciones
         services.AddScoped<IAsignaciones, AsingacionesService>(); 

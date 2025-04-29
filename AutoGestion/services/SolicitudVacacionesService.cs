@@ -1,6 +1,7 @@
 ﻿
 using AutoGestion.interfaces;
 using AutoGestion.interfaces.IConfiguracion;
+using AutoGestion.interfaces.IEmailService;
 using AutoGestion.Interfaces.ISolicitudVacaciones;
 using AutoGestion.Models;
 using AutoGestion.Models.SolicitudVacacionesDto;
@@ -13,13 +14,16 @@ namespace AutoGestion.Services.SolicitudVacaciones
         private readonly IConfiguracionAprobacionRepository _cfgRepo;
         private readonly IEmpleadoRepository _empleadoRepo;
         private readonly IAsignaciones _utils;
+        private readonly IEmailService _emailService;
 
         public SolicitudVacacionesService(
+            IEmailService emailService,
             ISolicitudVacacionesRepository repo,
             IConfiguracionAprobacionRepository cfgRepo,
             IEmpleadoRepository empleadoRepo,
             IAsignaciones utils)
         {
+            _emailService = emailService;
             _repo = repo;
             _cfgRepo = cfgRepo;
             _utils = utils;
@@ -115,7 +119,54 @@ namespace AutoGestion.Services.SolicitudVacaciones
 
             // Guardar la solicitud en el repositorio
             var created = await _repo.AddSolicitudAsync(sol);
+            foreach (var paso in created.Aprobaciones)
+            {
+                if (string.IsNullOrWhiteSpace(paso.EmpleadoAprobadorId))
+                    continue;
 
+                var aprobador = await _empleadoRepo.GetEmpleadoById(paso.EmpleadoAprobadorId);
+                if (aprobador?.correo is string email)
+                {
+                    var asunto = "Tienes una nueva solicitud de vacaciones para aprobar";
+                    var cuerpo = $@"
+    <div style=""font-family: Arial, sans-serif; font-size: 15px; color: #333;"">
+        <h2 style=""color: #2c3e50;"">Nueva solicitud de vacaciones</h2>
+        <p>Hola <strong>{aprobador.nombre}</strong>,</p>
+        <p>El empleado <strong>{sol.Empleado.nombre}</strong> ha registrado una solicitud de vacaciones.</p>
+
+        <table style=""margin-top: 20px; border-collapse: collapse;"">
+            <tr>
+                <td style=""padding: 8px; font-weight: bold;"">Desde:</td>
+                <td style=""padding: 8px;"">{sol.FechaInicio:dd/MM/yyyy}</td>
+            </tr>
+            <tr>
+                <td style=""padding: 8px; font-weight: bold;"">Hasta:</td>
+                <td style=""padding: 8px;"">{sol.FechaFin:dd/MM/yyyy}</td>
+            </tr>
+            <tr>
+                <td style=""padding: 8px; font-weight: bold;"">Descripción:</td>
+                <td style=""padding: 8px;"">{sol.Descripcion}</td>
+            </tr>
+        </table>
+
+        <p style=""margin-top: 20px;"">
+            Puedes revisar y aprobar la solicitud en el sistema:
+        </p>
+        <a href=""http://localhost:3000/solicitudes/aprobacion"" 
+           style=""display: inline-block; background-color: #007bff; color: #fff; padding: 10px 15px;
+                  text-decoration: none; border-radius: 5px; margin-top: 10px;"">
+           Ver solicitud
+        </a>
+
+        <p style=""margin-top: 30px; font-size: 13px; color: #999;"">
+            Este es un mensaje automático. Por favor, no respondas a este correo.
+        </p>
+    </div>";
+
+
+                    await _emailService.SendEmailAsync(email, asunto, cuerpo);
+                }
+            }
             return MapToDto(created);
         }
 
