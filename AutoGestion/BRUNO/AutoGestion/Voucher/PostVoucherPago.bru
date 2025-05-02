@@ -1,0 +1,32 @@
+meta {
+  name: PostVoucherPago
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{url}}/api/VoucherPago
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "EmpleadoId": "7bee27f1-2617-4e79-a962-73cfb7c81a59",
+    "FechaPago": "2025-04-30",
+    "SalarioBruto": 10000,
+    "SalarioNeto": 9600,
+    "Observaciones": "Pago Exitoso",
+    "Detalles": [
+      {
+        "TipoDeduccionId": "fa0dc5cc-226d-449d-8b9e-bef4583adc3a",
+        "TipoDeduccionNombre": "RAP",
+        "Monto": "400"
+      }
+    ]
+  }
+}

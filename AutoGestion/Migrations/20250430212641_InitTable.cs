@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AutoGestion.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDB : Migration
+    public partial class InitTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -312,6 +312,40 @@ namespace AutoGestion.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "VoucherPagos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EmpleadoId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FechaPago = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DiasTrabajados = table.Column<int>(type: "int", nullable: false),
+                    SalarioDiario = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    SalarioMensual = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    NetoPagar = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    Observaciones = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    adicionado_por = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    modificado_por = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VoucherPagos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VoucherPagos_Empleados_EmpleadoId",
+                        column: x => x.EmpleadoId,
+                        principalTable: "Empleados",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "SolicitudVacacionAprobacion",
                 columns: table => new
                 {
@@ -357,10 +391,56 @@ namespace AutoGestion.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "DetalleVoucherPagos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    VoucherPagoId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    TipoDeduccionId = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Monto = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    adicionado_por = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    modificado_por = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DetalleVoucherPagos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DetalleVoucherPagos_TipoDeducciones_TipoDeduccionId",
+                        column: x => x.TipoDeduccionId,
+                        principalTable: "TipoDeducciones",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DetalleVoucherPagos_VoucherPagos_VoucherPagoId",
+                        column: x => x.VoucherPagoId,
+                        principalTable: "VoucherPagos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_ConfiguracionAprobacion_puesto_id",
                 table: "ConfiguracionAprobacion",
                 column: "puesto_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetalleVoucherPagos_TipoDeduccionId",
+                table: "DetalleVoucherPagos",
+                column: "TipoDeduccionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetalleVoucherPagos_VoucherPagoId",
+                table: "DetalleVoucherPagos",
+                column: "VoucherPagoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Empleados_jefe_id",
@@ -412,11 +492,19 @@ namespace AutoGestion.Migrations
                 name: "IX_Usuarios_rol_id",
                 table: "Usuarios",
                 column: "rol_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VoucherPagos_EmpleadoId",
+                table: "VoucherPagos",
+                column: "EmpleadoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "DetalleVoucherPagos");
+
             migrationBuilder.DropTable(
                 name: "RolePermiso");
 
@@ -424,13 +512,16 @@ namespace AutoGestion.Migrations
                 name: "SolicitudVacacionAprobacion");
 
             migrationBuilder.DropTable(
-                name: "TipoDeducciones");
-
-            migrationBuilder.DropTable(
                 name: "TipoSolicitud");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");
+
+            migrationBuilder.DropTable(
+                name: "TipoDeducciones");
+
+            migrationBuilder.DropTable(
+                name: "VoucherPagos");
 
             migrationBuilder.DropTable(
                 name: "Permisos");

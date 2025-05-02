@@ -69,7 +69,16 @@ namespace CarWashBackend.Data
                     //Puestos
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_puestos", Descripcion = "Permiso para ver puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_puestos", Descripcion = "Permiso para crear puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
-                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_puestos", Descripcion = "Permiso para editar puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true }
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_puestos", Descripcion = "Permiso para editar puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    
+                    //Contabilidad
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_contabilidad", Descripcion = "Permiso para ver modulo de contabilidad", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_generar_planilla", Descripcion = "Permiso para ver la pantalla de generar planilla", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    
+                    //voucher
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_voucher_pago", Descripcion = "Permiso para ver los voucher de pago", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_detalle_voucher_pago", Descripcion = "Permiso para ver la pantalla de detalle de voucher", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true }
+
                 );
                 _context.SaveChanges();
             }

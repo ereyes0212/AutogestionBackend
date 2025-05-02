@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoGestion.Migrations
 {
     [DbContext(typeof(DbContextAutoGestion))]
-    [Migration("20250429214215_InitDB")]
-    partial class InitDB
+    [Migration("20250430212641_InitTable")]
+    partial class InitTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,46 @@ namespace AutoGestion.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("AutoGestion.Models.DetalleVoucherPago", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("TipoDeduccionId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("VoucherPagoId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<string>("adicionado_por")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("modificado_por")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TipoDeduccionId");
+
+                    b.HasIndex("VoucherPagoId");
+
+                    b.ToTable("DetalleVoucherPagos");
+                });
 
             modelBuilder.Entity("AutoGestion.Models.Puesto", b =>
                 {
@@ -250,6 +290,55 @@ namespace AutoGestion.Migrations
                     b.ToTable("Usuarios");
                 });
 
+            modelBuilder.Entity("AutoGestion.Models.VoucherPago", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<int>("DiasTrabajados")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmpleadoId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("varchar(36)");
+
+                    b.Property<DateTime>("FechaPago")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("NetoPagar")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Observaciones")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("SalarioDiario")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("SalarioMensual")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("adicionado_por")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("modificado_por")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmpleadoId");
+
+                    b.ToTable("VoucherPagos");
+                });
+
             modelBuilder.Entity("ConfiguracionAprobacion", b =>
                 {
                     b.Property<string>("Id")
@@ -472,6 +561,25 @@ namespace AutoGestion.Migrations
                     b.ToTable("TipoSolicitud");
                 });
 
+            modelBuilder.Entity("AutoGestion.Models.DetalleVoucherPago", b =>
+                {
+                    b.HasOne("AutoGestion.Models.TipoDeduccion", "TipoDeduccion")
+                        .WithMany()
+                        .HasForeignKey("TipoDeduccionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoGestion.Models.VoucherPago", "VoucherPago")
+                        .WithMany("DetallesVoucherPago")
+                        .HasForeignKey("VoucherPagoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TipoDeduccion");
+
+                    b.Navigation("VoucherPago");
+                });
+
             modelBuilder.Entity("AutoGestion.Models.SolicitudVacacion", b =>
                 {
                     b.HasOne("Empleado", "Empleado")
@@ -535,6 +643,17 @@ namespace AutoGestion.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("AutoGestion.Models.VoucherPago", b =>
+                {
+                    b.HasOne("Empleado", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Empleado");
+                });
+
             modelBuilder.Entity("ConfiguracionAprobacion", b =>
                 {
                     b.HasOne("AutoGestion.Models.Puesto", "Puesto")
@@ -583,6 +702,11 @@ namespace AutoGestion.Migrations
             modelBuilder.Entity("AutoGestion.Models.SolicitudVacacion", b =>
                 {
                     b.Navigation("Aprobaciones");
+                });
+
+            modelBuilder.Entity("AutoGestion.Models.VoucherPago", b =>
+                {
+                    b.Navigation("DetallesVoucherPago");
                 });
 
             modelBuilder.Entity("Empleado", b =>

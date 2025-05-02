@@ -75,7 +75,7 @@ builder.Services.AddSingleton<IEmailService>(provider =>
     var host = "mail.tiempo.hn";
     var port = 587; // o el puerto que uses
     var username = "erick.reyes@tiempo.hn";
-    var password = "3372ac8yz$B3Ougrhh##tqUc";
+    var password = "gT7!pR2#vL9@xW5z";
     var from = username;
 
     return new SmtpEmailService(host, port, username, password, from);

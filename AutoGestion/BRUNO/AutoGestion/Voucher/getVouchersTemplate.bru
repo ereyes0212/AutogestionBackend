@@ -1,0 +1,15 @@
+meta {
+  name: getVouchersTemplate
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{url}}/api/VoucherPago
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

@@ -1,0 +1,15 @@
+meta {
+  name: getVouchers
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/api/TipoSolicitud
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

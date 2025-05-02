@@ -1,0 +1,15 @@
+meta {
+  name: GetVoucherPagoById
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{url}}/api/VoucherPago/0bcee906-0bd3-4a9c-b1c7-9d25aab51617
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
