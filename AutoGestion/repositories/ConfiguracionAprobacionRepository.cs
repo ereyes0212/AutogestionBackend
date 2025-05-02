@@ -14,11 +14,12 @@ namespace AutoGestion.Repositories
         }
 
         public async Task<IEnumerable<ConfiguracionAprobacion>> GetAprobaciones()
-        {
-            return await _context.ConfiguracionAprobacion
-                .Include(c => c.Puesto)
-                .ToListAsync();
-        }
+            => await _context.ConfiguracionAprobacion
+                    .AsNoTracking()
+                    .Include(c => c.Puesto)
+                    .OrderBy(c => c.nivel)
+                    .ToListAsync();
+
 
         public async Task<ConfiguracionAprobacion> GetAprobacionesById(string id)
         {
