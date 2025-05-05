@@ -9,6 +9,7 @@
         string GenerateJwtToken<T>(T data);
         string? GetClaimValue(string token, string claimType);
         string? GetTokenFromHeader();
+        public string GenerarPasswordAleatoria(int longitud);
     }
 
 }

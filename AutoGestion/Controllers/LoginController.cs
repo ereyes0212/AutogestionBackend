@@ -1,6 +1,5 @@
 ﻿using AutoGestion.interfaces.ILogin;
 using AutoGestion.models;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AutoGestion.Controllers
@@ -28,6 +27,29 @@ namespace AutoGestion.Controllers
             {
                 // Realizar login y obtener el JWT
                 var token = await _loginService.Login(loginRequest.username, loginRequest.password);
+                return Ok(new { Token = token });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error en el servidor", details = ex.Message });
+            }
+        }        
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetDto loginRequest)
+        {
+            if (loginRequest == null)
+            {
+                return BadRequest("Datos inválidos.");
+            }
+
+            try
+            {
+                // Realizar login y obtener el JWT
+                var token = await _loginService.ResetPassword(loginRequest.username, loginRequest.newPassword);
                 return Ok(new { Token = token });
             }
             catch (UnauthorizedAccessException ex)

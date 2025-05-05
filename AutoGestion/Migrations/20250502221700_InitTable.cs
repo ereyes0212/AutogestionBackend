@@ -283,6 +283,7 @@ namespace AutoGestion.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     contrasena = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    DebeCambiarPassword = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     created_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     updated_at = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     rol_id = table.Column<string>(type: "varchar(36)", maxLength: 36, nullable: false)

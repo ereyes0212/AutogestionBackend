@@ -1,6 +1,5 @@
 ﻿using AutoGestion.interfaces;
 using AutoGestion.interfaces.ILogin;
-using AutoGestion.repositories;
 
 namespace AutoGestion.services
 {
@@ -37,6 +36,7 @@ namespace AutoGestion.services
                 User = user.usuario,
                 Rol = user.Role!.Nombre,
                 IdRol = user.Role.Id,
+                DebeCambiar = user.DebeCambiarPassword,
                 IdEmpleado = user.empleado_id,
                 Permiso = userPermissions,
                 Puesto = user.Empleado!.Puesto!.Nombre,
@@ -47,5 +47,36 @@ namespace AutoGestion.services
 
             return token;
         }
+
+        public async Task<string> ResetPassword(string username, string newPassword)
+        {
+            var usuario = await _loginRepository.GetUserByUsername(username)
+                ?? throw new KeyNotFoundException($"Usuario '{username}' no encontrado.");
+
+            usuario.contrasena = _asignaciones.EncriptPassword(newPassword);
+            usuario.DebeCambiarPassword = false;
+            usuario.updated_at = _asignaciones.GetCurrentDateTime();
+
+            var updated = await _loginRepository.ResetPassword(usuario);
+
+
+            var permisos = await _loginRepository.GetUserPermissions(updated.id!);
+            var payload = new
+            {
+                IdUser = updated.id,
+                User = updated.usuario,
+                Rol = updated.Role!.Nombre,
+                IdRol = updated.Role.Id,
+                DebeCambiar = updated.DebeCambiarPassword,
+                IdEmpleado = updated.empleado_id,
+                Permiso = permisos,
+                Puesto = updated.Empleado!.Puesto!.Nombre,
+                PuestoId = updated.Empleado.Puesto.Id
+            };
+
+            var newToken = _asignaciones.GenerateJwtToken(payload);
+            return newToken;
+        }
+
     }
 }

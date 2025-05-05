@@ -12,5 +12,6 @@ namespace AutoGestion.models.Usuario
         public string empleado { get; set; }
         public string empleado_id { get; set; }
         public bool activo { get; set; }
+        public bool debeCambiarContrasena { get; set; }
     }
 }

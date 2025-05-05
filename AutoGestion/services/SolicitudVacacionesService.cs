@@ -95,18 +95,16 @@ namespace AutoGestion.Services.SolicitudVacaciones
                 // Verificar si el puesto es fijo o dinámico
                 if (cfg.Tipo == "Fijo")
                 {
-                    // Asignar el empleado correspondiente para aprobar la solicitud (fijo)
                     var empleado = await _empleadoRepo.GetEmpleadoByPuesto(cfg.puesto_id);
 
-                    aprobacion.EmpleadoAprobadorId = empleado.id; // empleado asignado al puesto fijo
+                    aprobacion.EmpleadoAprobadorId = empleado.id;
                 }
                 else if (cfg.Tipo == "Dinamico")
                 {
-                    // Si el puesto es dinámico, obtener el jefe del empleado que hace la solicitud
                     var jefeEmpleado = await _empleadoRepo.GetEmpleadoById(IdEmpleado);
                     if (jefeEmpleado != null)
                     {
-                        aprobacion.EmpleadoAprobadorId = jefeEmpleado.jefe_id; // Asignar al jefe para aprobar
+                        aprobacion.EmpleadoAprobadorId = jefeEmpleado.jefe_id; 
                     }
                     else
                     {

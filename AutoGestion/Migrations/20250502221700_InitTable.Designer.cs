@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoGestion.Migrations
 {
     [DbContext(typeof(DbContextAutoGestion))]
-    [Migration("20250430212641_InitTable")]
+    [Migration("20250502221700_InitTable")]
     partial class InitTable
     {
         /// <inheritdoc />
@@ -245,6 +245,9 @@ namespace AutoGestion.Migrations
                     b.Property<string>("id")
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
+
+                    b.Property<bool>("DebeCambiarPassword")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<ulong>("activo")
                         .HasColumnType("bit");

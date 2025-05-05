@@ -243,6 +243,9 @@ namespace AutoGestion.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("varchar(36)");
 
+                    b.Property<bool>("DebeCambiarPassword")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<ulong>("activo")
                         .HasColumnType("bit");
 

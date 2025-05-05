@@ -77,7 +77,10 @@ namespace CarWashBackend.Data
                     
                     //voucher
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_voucher_pago", Descripcion = "Permiso para ver los voucher de pago", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
-                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_detalle_voucher_pago", Descripcion = "Permiso para ver la pantalla de detalle de voucher", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true }
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_detalle_voucher_pago", Descripcion = "Permiso para ver la pantalla de detalle de voucher", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    
+                    //voucher
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_profile", Descripcion = "Permiso para ver el perfil", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true }
 
                 );
                 _context.SaveChanges();
@@ -138,16 +141,16 @@ namespace CarWashBackend.Data
             }
 
             // Crear Empleado si no existe
-            var empleado = _context.Empleados.FirstOrDefault(e => e.correo == "erick.reyes@tiempo.hn");
+            var empleado = _context.Empleados.FirstOrDefault(e => e.correo == "marta.rapalo@tiempo.hn");
             if (empleado == null)
             {
                 empleado = new Empleado
                 {
                     id = Guid.NewGuid().ToString(),
-                    nombre = "Erick Jose",
-                    apellido = "Reyes Pineda",
+                    nombre = "Marta",
+                    apellido = "Rapalo",
                     puesto_id = puesto.Id,
-                    correo = "erick.reyes@tiempo.hn",
+                    correo = "marta.rapalo@tiempo.hn",
                     FechaNacimiento = new DateTime(1999, 12, 2),
                     Vacaciones= 10,
                     genero = "Masculino",
@@ -163,16 +166,19 @@ namespace CarWashBackend.Data
             }
 
             // Crear Usuario si no existe
-            if (!_context.Usuarios.Any(u => u.usuario == "erick.reyes"))
+            if (!_context.Usuarios.Any(u => u.usuario == "marta.rapalo"))
             {
                 var usuario = new Usuario
                 {
                     id = Guid.NewGuid().ToString(),
-                    usuario = "erick.reyes",
-                    contrasena = BCrypt.Net.BCrypt.HashPassword("erick.reyes"),
+                    usuario = "marta.rapalo",
+                    contrasena = BCrypt.Net.BCrypt.HashPassword("marta.rapalo"),
                     empleado_id = empleado.id,
                     rol_id = adminRole.Id,
                     activo = true,
+                    DebeCambiarPassword= true,
+                    adicionado_por= "Sistema",
+                    modificado_por="Sistema",
                     created_at = DateTime.UtcNow,
                     updated_at = DateTime.UtcNow
                 };

@@ -94,6 +94,13 @@ namespace AutoGestion.services
             return _httpContextAccessor.HttpContext?.Request.Headers["Authorization"]
                 .FirstOrDefault()?.Split(" ").Last();
         }
+
+        public string GenerarPasswordAleatoria(int longitud = 10)
+        {
+            const string caracteres = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@$?_-";
+            var random = new Random();
+            return new string(Enumerable.Range(0, longitud).Select(_ => caracteres[random.Next(caracteres.Length)]).ToArray());
+        }
     }
 
 }

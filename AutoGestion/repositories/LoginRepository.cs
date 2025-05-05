@@ -46,7 +46,12 @@ namespace AutoGestion.repositories
 
             return userPermissions;
         }
-
+        public async Task<Usuario> ResetPassword(Usuario usuario)
+        {
+            _dbContextAutoGestion.Entry(usuario).State = EntityState.Modified;
+            await _dbContextAutoGestion.SaveChangesAsync();
+            return usuario;
+        }
 
 
 
