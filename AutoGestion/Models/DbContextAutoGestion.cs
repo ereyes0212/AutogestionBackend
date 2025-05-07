@@ -22,6 +22,8 @@ namespace AutoGestion.Models
         public DbSet<TipoDeduccion> TipoDeducciones { get; set; }
         public DbSet<VoucherPago> VoucherPagos { get; set; }
         public DbSet<DetalleVoucherPago> DetalleVoucherPagos { get; set; }
+        public DbSet<TipoSeccion> TipoSeccion { get; set; }
+        public DbSet<ReporteDiseño> ReporteDiseño { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,0 +1,23 @@
+meta {
+  name: PutReporteDiseño
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{url}}/api/ReporteDiseño/907784c6-996b-400f-ace4-c563f3aad479
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "Nombre": "Editoriales",
+    "Descripcion": "Seccion de editoriales",
+    "activo":true
+  }
+}

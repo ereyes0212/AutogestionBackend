@@ -65,11 +65,22 @@ namespace CarWashBackend.Data
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_tipodeducciones", Descripcion = "Permiso para ver tipo deducciones", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_tipodeducciones", Descripcion = "Permiso para crear tipo deducciones", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_tipodeducciones", Descripcion = "Permiso para editar tipo deducciones", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    
+
+                    //Tipo Seccion
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_tipo_seccion", Descripcion = "Permiso para ver tipo sección", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_tipo_seccion", Descripcion = "Permiso para crear tipo sección", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_tipo_seccion", Descripcion = "Permiso para editar tipo sección", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
 
                     //Puestos
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_puestos", Descripcion = "Permiso para ver puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_puestos", Descripcion = "Permiso para crear puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_puestos", Descripcion = "Permiso para editar puestos", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    
+                    //Reporte
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_reporte_diseno", Descripcion = "Permiso para ver reporte de diseño", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "crear_reporte_diseno", Descripcion = "Permiso para crear reporte de diseño", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
+                    new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "editar_reporte_diseno", Descripcion = "Permiso para editar reporte de diseño", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },
                     
                     //Contabilidad
                     new Permiso { Id = Guid.NewGuid().ToString(), Nombre = "ver_contabilidad", Descripcion = "Permiso para ver modulo de contabilidad", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow, Activo = true },

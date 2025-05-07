@@ -4,6 +4,7 @@ using AutoGestion.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoGestion.Migrations
 {
     [DbContext(typeof(DbContextAutoGestion))]
-    partial class DbContextAutoGestionModelSnapshot : ModelSnapshot
+    [Migration("20250505221527_AddTable")]
+    partial class AddTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,61 +99,6 @@ namespace AutoGestion.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Puesto");
-                });
-
-            modelBuilder.Entity("AutoGestion.Models.ReporteDiseño", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<string>("EmpleadoId")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<TimeOnly>("HoraFin")
-                        .HasColumnType("time(6)");
-
-                    b.Property<TimeOnly>("HoraInicio")
-                        .HasColumnType("time(6)");
-
-                    b.Property<string>("Observacion")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("PaginaFin")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PaginaInicio")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SeccionId")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("varchar(36)");
-
-                    b.Property<string>("adicionado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("created_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("modificado_por")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("updated_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmpleadoId");
-
-                    b.HasIndex("SeccionId");
-
-                    b.ToTable("ReporteDiseño");
                 });
 
             modelBuilder.Entity("AutoGestion.Models.SolicitudVacacion", b =>
@@ -669,25 +617,6 @@ namespace AutoGestion.Migrations
                     b.Navigation("TipoDeduccion");
 
                     b.Navigation("VoucherPago");
-                });
-
-            modelBuilder.Entity("AutoGestion.Models.ReporteDiseño", b =>
-                {
-                    b.HasOne("Empleado", "Empleado")
-                        .WithMany()
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TipoSeccion", "Seccion")
-                        .WithMany()
-                        .HasForeignKey("SeccionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Empleado");
-
-                    b.Navigation("Seccion");
                 });
 
             modelBuilder.Entity("AutoGestion.Models.SolicitudVacacion", b =>

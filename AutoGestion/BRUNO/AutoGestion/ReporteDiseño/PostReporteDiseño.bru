@@ -1,0 +1,22 @@
+meta {
+  name: PostReporteDiseño
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/api/ReporteDiseño
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "Nombre": "Editoriales",
+    "Descripcion": "Seccion enfocada en editoriales"
+  }
+}

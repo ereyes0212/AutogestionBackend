@@ -15,6 +15,8 @@ using AutoGestion.interfaces.IEmailService;
 using AutoGestion.interfaces.iTipoDeduccion;
 using AutoGestion.interfaces.IVoucherPago;
 using AutoGestion.Services;
+using AutoGestion.interfaces.iTipoSeccion;
+using AutoGestion.interfaces.IReporteDiseño;
 
 public static class ServiceRegistration
 {
@@ -53,9 +55,17 @@ public static class ServiceRegistration
         services.AddScoped<ITipoDeduccionRepository, TipoDeduccionRepository>();
         services.AddScoped<ITipoDeduccionService, TipoDeduccionService>();   
         
-        //SolicitudVacaciones
+        //Voucher
         services.AddScoped<IVoucherPagoRepository, VoucherPagoRepository>();
         services.AddScoped<IVoucherPagoService, VoucherPagoService>();   
+        
+        //TipoSecciones
+        services.AddScoped<ITipoSeccionRepository, TipoSeccionRepository>();
+        services.AddScoped<ITipoSeccionService, TipoSeccionService>();   
+        
+        //ReporteDiseño
+        services.AddScoped<IReporteDiseñoReporsitory, ReporteDiseñoRepository>();
+        services.AddScoped<IReporteDiseñoService, ReporteDiseñoService>();   
 
         //Asignaciones
         services.AddScoped<IAsignaciones, AsingacionesService>(); 

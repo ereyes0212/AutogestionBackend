@@ -1,0 +1,22 @@
+meta {
+  name: PostTipoSeccion
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{url}}/api/TipoSeccion
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "Nombre": "Editoriales",
+    "Descripcion": "Seccion enfocada en editoriales"
+  }
+}

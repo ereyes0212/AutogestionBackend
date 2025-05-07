@@ -1,0 +1,15 @@
+meta {
+  name: GetTipoSeccion
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{url}}/api/TipoSeccion
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
