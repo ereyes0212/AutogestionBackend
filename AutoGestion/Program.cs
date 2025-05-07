@@ -25,19 +25,19 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(80);
 });
 
-//var mysqlHost = Environment.GetEnvironmentVariable("MYSQL_HOST");
-//var mysqlDatabase = Environment.GetEnvironmentVariable("MYSQL_DATABASE");
-//var mysqlUser = Environment.GetEnvironmentVariable("MYSQL_USER");
-//var mysqlPassword = Environment.GetEnvironmentVariable("MYSQL_PASSWORD");
-//var connectionString = $"server={mysqlHost};database={mysqlDatabase};uid={mysqlUser};pwd={mysqlPassword}";
+var mysqlHost = Environment.GetEnvironmentVariable("MYSQL_HOST");
+var mysqlDatabase = Environment.GetEnvironmentVariable("MYSQL_DATABASE");
+var mysqlUser = Environment.GetEnvironmentVariable("MYSQL_USER");
+var mysqlPassword = Environment.GetEnvironmentVariable("MYSQL_PASSWORD");
+var connectionString = $"server={mysqlHost};database={mysqlDatabase};uid={mysqlUser};pwd={mysqlPassword}";
 
 
 // Definir las credenciales de la base de datos de forma fija
-var mysqlHost = "localhost";
-var mysqlDatabase = "AutoGestion_DB";
-var mysqlUser = "root";
-var mysqlPassword = "P@ssWord.123";
-var connectionString = $"server={mysqlHost};port=3306;database={mysqlDatabase};uid={mysqlUser};pwd={mysqlPassword}";
+//var mysqlHost = "localhost";
+//var mysqlDatabase = "AutoGestion_DB";
+//var mysqlUser = "root";
+//var mysqlPassword = "P@ssWord.123";
+//var connectionString = $"server={mysqlHost};port=3306;database={mysqlDatabase};uid={mysqlUser};pwd={mysqlPassword}";
 //Construir el ConnectionString para MySQL (incluyendo el puerto 3306)
 // Add services to the container.
 
